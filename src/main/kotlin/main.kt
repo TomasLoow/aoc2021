@@ -41,4 +41,7 @@ fun main() {
     println("===Day 4===")
     println("part 1: " + day4_1())
     println("part 2: " + day4_2())
+    println("===Day 5===")
+    println("part 1: " + day5_1())
+    println("part 2: " + day5_2())
 }
