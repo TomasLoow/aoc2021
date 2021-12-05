@@ -28,9 +28,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     override fun part1(): Int {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)
 
-        val balls = data.first
-        val boards = data.second
-
+        val (balls, boards) = data
 
         for (ball in balls) {
             for (board in boards) {
@@ -47,8 +45,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     override fun part2(): Int {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)
 
-        val balls = data.first
-        val boards = data.second
+        val (balls, boards) = data
 
         val numberOfBoards = boards.size
         var numberOfWins = 0

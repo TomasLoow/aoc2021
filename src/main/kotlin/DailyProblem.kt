@@ -8,6 +8,7 @@ interface DailyProblem {
         println("=== Day $number ===")
         println("part 1: " + this.part1())
         println("part 2: " + this.part2())
+        println()
     }
 
 }

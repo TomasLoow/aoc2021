@@ -9,8 +9,9 @@ class VentLine(private val startX: Int, private val startY: Int, private val end
     }
 
     fun coveredPoints(): Set<Pair<Int, Int>> {
-        val dx: Int = sign((endX - startX).toDouble()).roundToInt()
-        val dy: Int = sign((endY - startY).toDouble()).roundToInt()
+
+        val dx: Int = endX.compareTo(startX)
+        val dy: Int = endY.compareTo(startY)
 
         val result: MutableSet<Pair<Int, Int>> = mutableSetOf()
         var x = startX

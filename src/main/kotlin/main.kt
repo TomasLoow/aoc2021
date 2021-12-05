@@ -7,7 +7,5 @@ val problems = listOf(
 )
 
 fun main() {
-
     problems.forEach { it.run() }
-
 }

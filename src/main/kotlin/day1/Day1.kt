@@ -5,11 +5,7 @@ import java.io.File
 
 
 fun countIncreases(input: List<Int>): Int {
-    var count = 0
-    for (x in input.windowed(2)) {
-        if (x[0] < x[1]) count++
-    }
-    return count
+    return input.windowed(2).count { it[0] < it[1] }
 }
 
 

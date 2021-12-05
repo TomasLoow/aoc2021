@@ -31,44 +31,45 @@ fun parseCommandFile(path: String): List<Pair<Command, Int>> {
     }
 }
 
+/* Move one step with the rules from part 1 of the problem */
+fun updatePos(pos: Pair<Int,Int>, cmd: Pair<Command, Int>) : Pair<Int,Int> {
+    val (command, arg) = cmd
+    val (x,depth) = pos
+    return when (command) {
+        Command.Forward -> Pair(x + arg, depth)
+        Command.Up      -> Pair(x, depth - arg)
+        Command.Down    -> Pair(x, depth + arg)
+    }
+}
+
+
+/* Move one step with the rules from part 2 of the problem */
+fun updatePosWithDelta(pos: Triple<Int,Int,Int>, cmd: Pair<Command, Int>) : Triple<Int,Int,Int> {
+    val (command, arg) = cmd
+    val (x,depth, delta) = pos
+    return when (command) {
+        Command.Forward -> Triple(x + arg, depth + delta*arg, delta)
+        Command.Up      -> Triple(x, depth, delta - arg)
+        Command.Down    -> Triple(x, depth, delta + arg)
+    }
+}
+
+
+
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 2
 
     override fun part1(): Int {
         val commands = parseCommandFile(this.inputFilePath)
+        val (x, depth) = commands.fold(Pair(0,0)) { pos, cmd -> updatePos(pos, cmd) }
 
-        var x = 0
-        var depth = 0
-        for (command in commands) {
-            val type = command.first
-            val arg = command.second
-            when (type) {
-                Command.Forward -> x += arg
-                Command.Up -> depth -= arg
-                Command.Down -> depth += arg
-            }
-        }
         return x * depth
     }
 
     override fun part2(): Int {
         val commands = parseCommandFile(this.inputFilePath)
+        val (x, depth, _) = commands.fold(Triple(0,0, 0)) { pos, cmd -> updatePosWithDelta(pos, cmd) }
 
-        var x = 0
-        var delta = 0
-        var depth = 0
-        for (command in commands) {
-            val type = command.first
-            val arg = command.second
-            when (type) {
-                Command.Forward -> {
-                    x += arg
-                    depth += delta * arg
-                }
-                Command.Up -> delta -= arg
-                Command.Down -> delta += arg
-            }
-        }
         return x * depth
     }
 }
