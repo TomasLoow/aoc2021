@@ -1,6 +1,6 @@
 package day4
 
-import DaylyProblem
+import DailyProblem
 import java.io.File
 
 fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
@@ -18,11 +18,11 @@ fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
 }
 
 private fun parseBoard(rows: List<String>): BingoBoard {
-    val allNums: List<Int> = rows.flatMap { it.trim().split(" +".toRegex()).map { it.toInt() } }
-    return BingoBoard(allNums.toTypedArray())
+    val allNumbers: List<Int> = rows.flatMap { row -> row.trim().split(" +".toRegex()).map { number -> number.toInt() } }
+    return BingoBoard(allNumbers.toTypedArray())
 }
 
-class Problem(override val inputFilePath: String) : DaylyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 4
     override fun part1(): Int {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)

@@ -1,6 +1,6 @@
 package day5
 
-import DaylyProblem
+import DailyProblem
 import java.io.File
 
 fun parseLinesFile(path: String): List<VentLine> {
@@ -28,7 +28,7 @@ private fun countIntersections(lines: List<VentLine>): Int {
 }
 
 
-class Problem(override val inputFilePath: String) : DaylyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
     override val number: Int = 5
 
     override fun part1(): Int {

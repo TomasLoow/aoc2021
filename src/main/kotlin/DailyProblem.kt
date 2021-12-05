@@ -1,4 +1,4 @@
-interface DaylyProblem {
+interface DailyProblem {
     val number: Int
     val inputFilePath: String
     fun part1(): Int

@@ -1,6 +1,6 @@
 package day1
 
-import DaylyProblem
+import DailyProblem
 import java.io.File
 
 
@@ -19,7 +19,7 @@ fun parseIntsFile(path: String): List<Int> {
 }
 
 
-class Problem(override val inputFilePath: String) : DaylyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 1
 
     override fun part1(): Int {

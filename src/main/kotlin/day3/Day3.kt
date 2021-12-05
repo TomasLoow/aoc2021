@@ -1,16 +1,14 @@
 package day3
 
-import DaylyProblem
+import DailyProblem
 import java.io.File
 
 fun parseBinaryFile(path: String): List<Array<Boolean>> {
     val lines: List<String> = File(path).readLines()
     return lines.map {
-        val bs = Array<Boolean>(it.length) { false }
-        var idx = 0
-        for (char in it.toCharArray()) {
+        val bs = Array(it.length) { false }
+        for ((idx, char) in it.toCharArray().withIndex()) {
             if (char == '1') bs[idx] = true
-            idx++
         }
         bs
     }
@@ -51,7 +49,7 @@ private fun bitCriteria(path: String, mode: CountMode): Int {
 
     val rowLength: Int = rows[0].size
 
-    for (idx in 0.rangeTo(rowLength - 1)) {
+    for (idx in 0 until rowLength) {
         val target = findMostCommonByIndex(rows, idx, mode)
         rows = rows.filter { it[idx] == target }
         if (rows.size == 1) break
@@ -59,7 +57,7 @@ private fun bitCriteria(path: String, mode: CountMode): Int {
     return binaryToInt(rows[0])
 }
 
-class Problem(override val inputFilePath: String) : DaylyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 3
 
@@ -68,10 +66,10 @@ class Problem(override val inputFilePath: String) : DaylyProblem {
 
         val rowLength: Int = input[0].size
 
-        val delta: Array<Boolean> = Array<Boolean>(rowLength) { false }
-        val epsilon: Array<Boolean> = Array<Boolean>(rowLength) { false }
+        val delta: Array<Boolean> = Array(rowLength) { false }
+        val epsilon: Array<Boolean> = Array(rowLength) { false }
 
-        for (idx in 0.rangeTo(rowLength - 1)) {
+        for (idx in 0 until rowLength) {
             val mostCommon = findMostCommonByIndex(input, idx, CountMode.MostCommon)
             delta[idx] = mostCommon
             epsilon[idx] = !mostCommon

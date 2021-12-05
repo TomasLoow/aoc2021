@@ -1,4 +1,4 @@
-val problems = listOf<DaylyProblem>(
+val problems = listOf(
     day1.problem,
     day2.problem,
     day3.problem,

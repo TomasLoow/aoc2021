@@ -1,6 +1,6 @@
 package day2
 
-import DaylyProblem
+import DailyProblem
 import java.io.File
 import java.util.*
 
@@ -31,7 +31,7 @@ fun parseCommandFile(path: String): List<Pair<Command, Int>> {
     }
 }
 
-class Problem(override val inputFilePath: String) : DaylyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 2
 
     override fun part1(): Int {

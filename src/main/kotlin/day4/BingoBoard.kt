@@ -1,6 +1,6 @@
 package day4
 
-val allRowIdxfun: List<Array<Pair<Int, Int>>> = listOf(
+val allRowIndices: List<Array<Pair<Int, Int>>> = listOf(
     arrayOf(Pair(0, 0), Pair(0, 1), Pair(0, 2), Pair(0, 3), Pair(0, 4)),
     arrayOf(Pair(1, 0), Pair(1, 1), Pair(1, 2), Pair(1, 3), Pair(1, 4)),
     arrayOf(Pair(2, 0), Pair(2, 1), Pair(2, 2), Pair(2, 3), Pair(2, 4)),
@@ -17,9 +17,9 @@ val allRowIdxfun: List<Array<Pair<Int, Int>>> = listOf(
     //arrayOf( Pair(0,4), Pair(1,3), Pair(2,2), Pair(3,1) , Pair(4,0)),
 )
 
-class BingoBoard(var numbers: Array<Int>) {
+class BingoBoard(private var numbers: Array<Int>) {
 
-    var marked = Array<Boolean>(25) { false }
+    private var marked = Array(25) { false }
     var hasWon: Boolean = false
 
     private fun toIdx(i: Int, j: Int): Int {
@@ -42,7 +42,7 @@ class BingoBoard(var numbers: Array<Int>) {
     fun checkBingo(): Boolean {
         // Check rows
 
-        return allRowIdxfun.any { this.checkRow(it) }
+        return allRowIndices.any { this.checkRow(it) }
     }
 
     private fun checkRow(indexes: Array<Pair<Int, Int>>): Boolean {
@@ -51,11 +51,11 @@ class BingoBoard(var numbers: Array<Int>) {
 
     fun getScore(): Int {
         val indicesOfUnmarked = this.marked.withIndex().filter { !it.value }.map { it.index }
-        val umarked = indicesOfUnmarked.map { this.numbers[it] }
-        return umarked.sum()
+        val unmarked = indicesOfUnmarked.map { this.numbers[it] }
+        return unmarked.sum()
     }
 
-    fun printMarks() {
+/*    fun printMarks() {
         for (i in 0.rangeTo(4)) {
             for (j in 0.rangeTo(4)) {
                 if (this.marked[this.toIdx(i, j)]) {
@@ -75,5 +75,5 @@ class BingoBoard(var numbers: Array<Int>) {
             }
             println()
         }
-    }
+    }*/
 }
