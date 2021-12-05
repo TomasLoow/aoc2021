@@ -18,7 +18,8 @@ fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
 }
 
 private fun parseBoard(rows: List<String>): BingoBoard {
-    val allNumbers: List<Int> = rows.flatMap { row -> row.trim().split(" +".toRegex()).map { number -> number.toInt() } }
+    val allNumbers: List<Int> =
+        rows.flatMap { row -> row.trim().split(" +".toRegex()).map { number -> number.toInt() } }
     return BingoBoard(allNumbers.toTypedArray())
 }
 
