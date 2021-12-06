@@ -54,26 +54,4 @@ class BingoBoard(private var numbers: Array<Int>) {
         val unmarked = indicesOfUnmarked.map { this.numbers[it] }
         return unmarked.sum()
     }
-
-/*    fun printMarks() {
-        for (i in 0.rangeTo(4)) {
-            for (j in 0.rangeTo(4)) {
-                if (this.marked[this.toIdx(i, j)]) {
-                    print("X")
-                } else {
-                    print(".")
-                }
-            }
-            println()
-        }
-    }
-
-    fun printBoard() {
-        for (i in 0.rangeTo(4)) {
-            for (j in 0.rangeTo(4)) {
-                print("" + this.numbers[this.toIdx(i, j)] + " ")
-            }
-            println()
-        }
-    }*/
 }

@@ -1,8 +1,10 @@
+import java.math.BigInteger
+
 interface DailyProblem {
     val number: Int
     val inputFilePath: String
-    fun part1(): Int
-    fun part2(): Int
+    fun part1(): Long
+    fun part2(): Long
 
     fun run() {
         println("=== Day $number ===")

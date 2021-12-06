@@ -2,6 +2,7 @@ package day2
 
 import DailyProblem
 import java.io.File
+import java.math.BigInteger
 import java.util.*
 
 
@@ -59,18 +60,18 @@ fun updatePosWithDelta(pos: Triple<Int,Int,Int>, cmd: Pair<Command, Int>) : Trip
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 2
 
-    override fun part1(): Int {
+    override fun part1(): Long {
         val commands = parseCommandFile(this.inputFilePath)
         val (x, depth) = commands.fold(Pair(0,0)) { pos, cmd -> updatePos(pos, cmd) }
 
-        return x * depth
+        return (x * depth).toLong()
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val commands = parseCommandFile(this.inputFilePath)
         val (x, depth, _) = commands.fold(Triple(0,0, 0)) { pos, cmd -> updatePosWithDelta(pos, cmd) }
 
-        return x * depth
+        return (x * depth).toLong()
     }
 }
 

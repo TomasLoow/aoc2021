@@ -2,10 +2,11 @@ package day1
 
 import DailyProblem
 import java.io.File
+import java.math.BigInteger
 
 
-fun countIncreases(input: List<Int>): Int {
-    return input.windowed(2).count { it[0] < it[1] }
+fun countIncreases(input: List<Int>): Long {
+    return input.windowed(2).count { it[0] < it[1] }.toLong()
 }
 
 
@@ -18,12 +19,12 @@ fun parseIntsFile(path: String): List<Int> {
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 1
 
-    override fun part1(): Int {
+    override fun part1(): Long {
         val input = parseIntsFile(this.inputFilePath)
         return countIncreases(input)
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val input = parseIntsFile(this.inputFilePath)
         val windowedSums = input.windowed(3).map { it.sum() }
         return countIncreases(windowedSums)

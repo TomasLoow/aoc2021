@@ -2,6 +2,7 @@ package day4
 
 import DailyProblem
 import java.io.File
+import java.math.BigInteger
 
 fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
     var lines: List<String> = File(path).readLines()
@@ -25,7 +26,7 @@ private fun parseBoard(rows: List<String>): BingoBoard {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 4
-    override fun part1(): Int {
+    override fun part1(): Long {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)
 
         val (balls, boards) = data
@@ -35,14 +36,14 @@ class Problem(override val inputFilePath: String) : DailyProblem {
                 board.markNumber(ball)
                 if (board.checkBingo()) {
                     val score = board.getScore()
-                    return ball * score
+                    return (ball * score).toLong()
                 }
             }
         }
         throw Exception("No bingo")
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)
 
         val (balls, boards) = data
@@ -59,7 +60,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
                     numberOfWins++
                     if (numberOfWins == numberOfBoards) {
                         val score = board.getScore()
-                        return ball * score
+                        return (ball * score).toLong()
                     }
                 }
             }

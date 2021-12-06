@@ -2,6 +2,7 @@ package day5
 
 import DailyProblem
 import java.io.File
+import java.math.BigInteger
 
 fun parseLinesFile(path: String): List<VentLine> {
     val lines: List<String> = File(path).readLines()
@@ -15,7 +16,7 @@ fun parseLinesFile(path: String): List<VentLine> {
 }
 
 
-private fun countIntersections(lines: List<VentLine>): Int {
+private fun countIntersections(lines: List<VentLine>): Long {
     val counter: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
     val pointsWithDuplicates = lines.flatMap { it.coveredPoints() }
 
@@ -23,15 +24,14 @@ private fun countIntersections(lines: List<VentLine>): Int {
         val current = counter.getOrDefault(point, 0)
         counter[point] = current + 1
     }
-
-    return counter.filter { it.value > 1 }.size
+    return counter.filter { it.value > 1 }.size.toLong()
 }
 
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number: Int = 5
 
-    override fun part1(): Int {
+    override fun part1(): Long {
         val lines = parseLinesFile(this.inputFilePath)
         val straightLines = lines.filter {
             it.isStraight()
@@ -39,7 +39,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
         return countIntersections(straightLines)
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val lines = parseLinesFile(this.inputFilePath)
         return countIntersections(lines)
     }

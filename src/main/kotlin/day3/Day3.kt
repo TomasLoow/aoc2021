@@ -2,6 +2,7 @@ package day3
 
 import DailyProblem
 import java.io.File
+import java.math.BigInteger
 
 fun parseBinaryFile(path: String): List<Array<Boolean>> {
     val lines: List<String> = File(path).readLines()
@@ -61,7 +62,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 3
 
-    override fun part1(): Int {
+    override fun part1(): Long {
         val input = parseBinaryFile(this.inputFilePath)
 
         val rowLength: Int = input[0].size
@@ -78,14 +79,13 @@ class Problem(override val inputFilePath: String) : DailyProblem {
         val deltaVal = binaryToInt(delta)
         val epsilonVal = binaryToInt(epsilon)
 
-        return deltaVal * epsilonVal
+        return (deltaVal * epsilonVal).toLong()
     }
 
-    override fun part2(): Int {
+    override fun part2(): Long {
         val oxygen = bitCriteria(this.inputFilePath, CountMode.MostCommon)
         val co2 = bitCriteria(this.inputFilePath, CountMode.LeastCommon)
-        return oxygen * co2
-
+        return (oxygen * co2).toLong()
     }
 }
 
