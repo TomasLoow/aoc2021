@@ -3,35 +3,33 @@ package day6
 import DailyProblem
 import java.io.File
 
-fun readInput(path: String): MutableList<Long> {
-    val state = Array<Long>(9) { 0 }
-    val line = File(path).readLines()[0].split(",").map { it.toInt() }
-    line.forEach { num -> state[num]++ }
-    return state.toMutableList()
+fun readFishesInput(path: String): MutableList<Long> {
+    val fishesCounts = Array<Long>(9) { 0 }
+    val fishes = File(path).readLines()[0].split(",").map { it.toInt() }
+    fishes.forEach { fishValue -> fishesCounts[fishValue]++ }
+    return fishesCounts.toMutableList()
 }
 
-class Problem(override val inputFilePath: String, steps: Int, steps2: Int) : DailyProblem {
-    override val number = 2
-    private val stepsPart1 = steps
-    private val stepsPart2 = steps2
+private fun simulate(fishesCounts: MutableList<Long>, steps: Int): Long {
+    for (step in 1..steps) {
+        val zeroes = fishesCounts.removeAt(0)
+        fishesCounts[6] += zeroes // Old zeroes are back to countdown 6
+        fishesCounts.add(zeroes)  // Their babies
+    }
+    return fishesCounts.sum()
+}
+
+class Problem(override val inputFilePath: String, private val stepsPart1: Int, private val stepsPart2: Int) : DailyProblem {
+    override val number = 6
 
     override fun part1(): Long {
-        val state = readInput(inputFilePath)
-        return simulate(state, stepsPart1)
-    }
-
-    private fun simulate(state: MutableList<Long>, steps: Int): Long {
-        for (step in 1..steps) {
-            val zeroes = state.removeAt(0)
-            state[6] += zeroes // Old zeroes are back to countdown 6
-            state.add(zeroes)  // Their babies
-        }
-        return state.sum()
+        val fishesCounts = readFishesInput(inputFilePath)
+        return simulate(fishesCounts, stepsPart1)
     }
 
     override fun part2(): Long {
-        val state = readInput(inputFilePath)
-        return simulate(state, stepsPart2)
+        val fishesCounts = readFishesInput(inputFilePath)
+        return simulate(fishesCounts, stepsPart2)
     }
 }
 
