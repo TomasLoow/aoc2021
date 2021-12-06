@@ -2,7 +2,6 @@ package day5
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 
 fun parseLinesFile(path: String): List<VentLine> {
     val lines: List<String> = File(path).readLines()

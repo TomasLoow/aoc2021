@@ -2,12 +2,11 @@ package day6
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 
 fun readInput(path: String): MutableList<Long> {
     val state = Array<Long>(9) { 0 }
-    val line = File(path).readLines()[0].split(",").map { it.toInt()}
-    line.forEach { num -> state[num]++}
+    val line = File(path).readLines()[0].split(",").map { it.toInt() }
+    line.forEach { num -> state[num]++ }
     return state.toMutableList()
 }
 
@@ -36,4 +35,4 @@ class Problem(override val inputFilePath: String, steps: Int, steps2: Int) : Dai
     }
 }
 
-val problem = Problem("input/day6.txt",80, 256 )
+val problem = Problem("input/day6.txt", 80, 256)

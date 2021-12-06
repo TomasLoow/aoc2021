@@ -1,5 +1,3 @@
-import java.math.BigInteger
-
 interface DailyProblem {
     val number: Int
     val inputFilePath: String

@@ -2,7 +2,6 @@ package day3
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 
 fun parseBinaryFile(path: String): List<Array<Boolean>> {
     val lines: List<String> = File(path).readLines()

@@ -2,7 +2,6 @@ package day4
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 
 fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
     var lines: List<String> = File(path).readLines()

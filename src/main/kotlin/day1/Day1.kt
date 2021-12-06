@@ -2,7 +2,6 @@ package day1
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 
 
 fun countIncreases(input: List<Int>): Long {

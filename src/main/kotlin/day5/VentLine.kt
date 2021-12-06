@@ -1,8 +1,5 @@
 package day5
 
-import kotlin.math.roundToInt
-import kotlin.math.sign
-
 class VentLine(private val startX: Int, private val startY: Int, private val endX: Int, private val endY: Int) {
     fun isStraight(): Boolean {
         return this.startX == this.endX || this.startY == this.endY

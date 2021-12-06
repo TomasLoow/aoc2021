@@ -2,7 +2,6 @@ package day2
 
 import DailyProblem
 import java.io.File
-import java.math.BigInteger
 import java.util.*
 
 
@@ -33,28 +32,27 @@ fun parseCommandFile(path: String): List<Pair<Command, Int>> {
 }
 
 /* Move one step with the rules from part 1 of the problem */
-fun updatePos(pos: Pair<Int,Int>, cmd: Pair<Command, Int>) : Pair<Int,Int> {
+fun updatePos(pos: Pair<Int, Int>, cmd: Pair<Command, Int>): Pair<Int, Int> {
     val (command, arg) = cmd
-    val (x,depth) = pos
+    val (x, depth) = pos
     return when (command) {
         Command.Forward -> Pair(x + arg, depth)
-        Command.Up      -> Pair(x, depth - arg)
-        Command.Down    -> Pair(x, depth + arg)
+        Command.Up -> Pair(x, depth - arg)
+        Command.Down -> Pair(x, depth + arg)
     }
 }
 
 
 /* Move one step with the rules from part 2 of the problem */
-fun updatePosWithDelta(pos: Triple<Int,Int,Int>, cmd: Pair<Command, Int>) : Triple<Int,Int,Int> {
+fun updatePosWithDelta(pos: Triple<Int, Int, Int>, cmd: Pair<Command, Int>): Triple<Int, Int, Int> {
     val (command, arg) = cmd
-    val (x,depth, delta) = pos
+    val (x, depth, delta) = pos
     return when (command) {
-        Command.Forward -> Triple(x + arg, depth + delta*arg, delta)
-        Command.Up      -> Triple(x, depth, delta - arg)
-        Command.Down    -> Triple(x, depth, delta + arg)
+        Command.Forward -> Triple(x + arg, depth + delta * arg, delta)
+        Command.Up -> Triple(x, depth, delta - arg)
+        Command.Down -> Triple(x, depth, delta + arg)
     }
 }
-
 
 
 class Problem(override val inputFilePath: String) : DailyProblem {
@@ -62,14 +60,14 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
     override fun part1(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val (x, depth) = commands.fold(Pair(0,0)) { pos, cmd -> updatePos(pos, cmd) }
+        val (x, depth) = commands.fold(Pair(0, 0)) { pos, cmd -> updatePos(pos, cmd) }
 
         return (x * depth).toLong()
     }
 
     override fun part2(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val (x, depth, _) = commands.fold(Triple(0,0, 0)) { pos, cmd -> updatePosWithDelta(pos, cmd) }
+        val (x, depth, _) = commands.fold(Triple(0, 0, 0)) { pos, cmd -> updatePosWithDelta(pos, cmd) }
 
         return (x * depth).toLong()
     }
