@@ -17,9 +17,18 @@ val allRowIndices: List<Array<Pair<Int, Int>>> = listOf(
     //arrayOf( Pair(0,4), Pair(1,3), Pair(2,2), Pair(3,1) , Pair(4,0)),
 )
 
-class BingoBoard(private var numbers: Array<Int>) {
+class BingoBoard() {
+    constructor(rows: List<String>) : this() {
+        numbers = rows.flatMap { row -> row
+            .trim()
+            .split(" +".toRegex())
+            .map { number -> number.toInt() }
+        }.toTypedArray()
+    }
 
+    private lateinit var numbers: Array<Int>
     private var marked = Array(25) { false }
+
     var hasWon: Boolean = false
 
     private fun toIdx(i: Int, j: Int): Int {
@@ -32,16 +41,13 @@ class BingoBoard(private var numbers: Array<Int>) {
     }
 
     private fun findIdxOfNumber(ball: Int): Int? {
-        val idx = this.numbers.indexOf(ball)
-        if (idx < 0) {
-            return null
-        }
-        return idx
+        return numbers
+            .withIndex()
+            .find { it.value == ball }
+            ?.index
     }
 
     fun checkBingo(): Boolean {
-        // Check rows
-
         return allRowIndices.any { this.checkRow(it) }
     }
 
@@ -50,7 +56,10 @@ class BingoBoard(private var numbers: Array<Int>) {
     }
 
     fun getScore(): Int {
-        val indicesOfUnmarked = this.marked.withIndex().filter { !it.value }.map { it.index }
+        val indicesOfUnmarked = marked
+            .withIndex()
+            .filter { !it.value }
+            .map { it.index }
         val unmarked = indicesOfUnmarked.map { this.numbers[it] }
         return unmarked.sum()
     }

@@ -5,22 +5,18 @@ import java.io.File
 
 fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
     var lines: List<String> = File(path).readLines()
-    val balls = lines[0].split(",").map { it.toInt() }
+    val balls = lines[0]
+        .split(",")
+        .map { it.toInt() }
     lines = lines.drop(2)
 
     val boards = ArrayList<BingoBoard>(0)
     while (lines.size >= 5) {
-        val board = parseBoard(lines.subList(0, 5))
+        val board = BingoBoard(lines.subList(0, 5))
         boards.add(board)
         lines = lines.drop(6)  // Five for board, one separator
     }
     return Pair(balls, boards)
-}
-
-private fun parseBoard(rows: List<String>): BingoBoard {
-    val allNumbers: List<Int> =
-        rows.flatMap { row -> row.trim().split(" +".toRegex()).map { number -> number.toInt() } }
-    return BingoBoard(allNumbers.toTypedArray())
 }
 
 class Problem(override val inputFilePath: String) : DailyProblem {

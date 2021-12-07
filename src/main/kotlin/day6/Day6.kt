@@ -5,8 +5,15 @@ import java.io.File
 
 fun readFishesInput(path: String): MutableList<Long> {
     val fishesCounts = Array<Long>(9) { 0 }
-    val fishes = File(path).readLines()[0].split(",").map { it.toInt() }
-    fishes.forEach { fishValue -> fishesCounts[fishValue]++ }
+
+    File(path).readLines()
+        .single()
+        .split(",")
+        .map { it.toInt() }
+        .forEach { fishValue ->
+            fishesCounts[fishValue]++
+        }
+
     return fishesCounts.toMutableList()
 }
 

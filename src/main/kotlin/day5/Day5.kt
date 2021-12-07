@@ -4,44 +4,45 @@ import DailyProblem
 import java.io.File
 
 fun parseLinesFile(path: String): List<VentLine> {
+    val lineRegex = """(\d+),(\d+) -> (\d+),(\d+)""".toRegex()
+
     val lines: List<String> = File(path).readLines()
     return lines.map { line ->
-        line.split(" -> ")
-    }.map { coordinatePairs ->
-        val start = coordinatePairs[0].split(",").map { num -> num.toInt() }
-        val end = coordinatePairs[1].split(",").map { num -> num.toInt() }
-        VentLine(start[0], start[1], end[0], end[1])
+        val matchResult = lineRegex.find(line)
+        val (startX, startY, endX, endY) = matchResult!!.destructured
+        VentLine(startX.toInt(), startY.toInt(), endX.toInt(), endY.toInt())
     }
 }
 
 
-private fun countIntersections(lines: List<VentLine>): Long {
+private fun List<VentLine>.countIntersections(): Long {
     val counter: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
-    val pointsWithDuplicates = lines.flatMap { it.coveredPoints() }
+    val pointsWithDuplicates = flatMap { it.coveredPoints() }
 
     for (point in pointsWithDuplicates) {
-        val current = counter.getOrDefault(point, 0)
-        counter[point] = current + 1
+        counter[point] = counter.getOrDefault(point, 0) + 1
     }
-    return counter.filter { it.value > 1 }.size.toLong()
-}
 
+    return counter
+        .filter { it.value > 1 }
+        .size
+        .toLong()
+}
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 5
 
     override fun part1(): Long {
-        val lines = parseLinesFile(this.inputFilePath)
-        val straightLines = lines.filter {
-            it.isStraight()
-        }
-        return countIntersections(straightLines)
+        return parseLinesFile(inputFilePath)
+            .filter { it.isStraight() }
+            .countIntersections()
     }
 
     override fun part2(): Long {
-        val lines = parseLinesFile(this.inputFilePath)
-        return countIntersections(lines)
+        return parseLinesFile(this.inputFilePath)
+            .countIntersections()
     }
 }
+
 
 val problem = Problem("input/day5.txt")

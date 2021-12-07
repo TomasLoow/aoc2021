@@ -60,14 +60,16 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
     override fun part1(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val (x, depth) = commands.fold(Pair(0, 0)) { pos, cmd -> updatePos(pos, cmd) }
+        val initialState = Pair(0, 0)
+        val (x, depth) = commands.fold(initialState) { pos, cmd -> updatePos(pos, cmd) }
 
         return (x * depth).toLong()
     }
 
     override fun part2(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val (x, depth, _) = commands.fold(Triple(0, 0, 0)) { pos, cmd -> updatePosWithDelta(pos, cmd) }
+        val initialState = Triple(0, 0, 0)
+        val (x, depth, _) = commands.fold(initialState) { pos, cmd -> updatePosWithDelta(pos, cmd) }
 
         return (x * depth).toLong()
     }
