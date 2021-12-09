@@ -15,6 +15,11 @@ private fun parseMap(path: String): SeaFloor {
         .toTypedArray())
 }
 
+private fun Collection<Int>.product(): Int {
+    return reduce { acc, i -> acc * i }
+}
+
+
 class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 9
@@ -22,7 +27,8 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     override fun part1(): Long {
         val seaFloor = parseMap(inputFilePath)
         return seaFloor
-            .findLowestPoints().sumOf { seaFloor.valueAt(it) + 1 }
+            .findLowestPoints()
+            .sumOf { seaFloor.valueAt(it) + 1 }
             .toLong()
     }
 
@@ -36,9 +42,10 @@ class Problem(override val inputFilePath: String) : DailyProblem {
                 seaFloor.sizeOfBasinAt(p)
             }
             .sortedDescending()
-            .take(3).reduce { acc, i -> acc * i }.toLong()
+            .take(3)
+            .product()
+            .toLong()
     }
-
 }
 
 val problem = Problem("input/day9.txt")

@@ -33,7 +33,7 @@ private fun CrabPositions.findBestPosition(): Long {
         when (neighbourOfMiddleScore.compareTo(middlePointScore)) {
             0  -> return middlePointScore  // If they are equal both must be optimal
             1  -> upperBound = middlePoint // The rightmost value was larger, we are to the right of the critical point
-            -1 -> lowerBound = middlePoint // The lefttmost value was larger, we are to the left of the critical point
+            -1 -> lowerBound = middlePoint // The leftmost value was larger, we are to the left of the critical point
         }
     }
     return min(

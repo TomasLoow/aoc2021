@@ -66,11 +66,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 8
 
     private fun Iterable<Int>.parseDecimal() : Int{
-        var acc = 0
-        forEach {
-            acc = acc*10 + it
-        }
-        return acc
+        return fold(0) {parsed, digit -> parsed*10 + digit }
     }
 
     override fun part1(): Long {
