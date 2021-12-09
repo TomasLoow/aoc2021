@@ -7,6 +7,7 @@ val problems = listOf(
     day6.problem,
     day7.problem,
     day8.problem,
+    day9.problem,
 )
 
 fun main() {

@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 internal class MultiTest {
-    @ParameterizedTest(name = "Example problem from Day {0}, part 1 should have answer {2}")
+    @ParameterizedTest(name = "Example problem from Day {0}, should have answers {1} and {2}")
     @MethodSource("testCases")
     fun `The solution of part one for each day should satisfy the small example on the webpage`(
         day: Int,
@@ -37,7 +37,8 @@ internal class MultiTest {
             Arguments.of(5, day5.Problem("input/testinput/day5.txt"), 5, 12),
             Arguments.of(6, day6.Problem("input/testinput/day6.txt", 80 ,256 ), 5934, 26984457539),
             Arguments.of(7, day7.Problem("input/testinput/day7.txt"), 37, 168),
-            Arguments.of(8, day8.Problem("input/testinput/day8.txt"), 26, 61229)
+            Arguments.of(8, day8.Problem("input/testinput/day8.txt"), 26, 61229),
+            Arguments.of(9, day9.Problem("input/testinput/day9.txt"), 15, 1134)
         )
     }
 
