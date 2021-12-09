@@ -3,11 +3,13 @@ package day8
 import DailyProblem
 import java.io.File
 
-fun strToWires(data: String): Set<Char> {
+typealias ActiveWires = Set<Char>
+
+fun strToWires(data: String): ActiveWires {
     return data.toCharArray().toSet()
 }
 
-fun parseDisplaysFile(path: String): List<Pair<List<Set<Char>>, List<Set<Char>>>> {
+fun parseDisplaysFile(path: String): List<Pair<List<ActiveWires>, List<ActiveWires>>> {
     return File(path)
         .readLines()
         .map { line ->
@@ -22,10 +24,10 @@ fun parseDisplaysFile(path: String): List<Pair<List<Set<Char>>, List<Set<Char>>>
         }
 }
 
-fun solveLine(line: Pair<List<Set<Char>>, List<Set<Char>>>): List<Int> {
+fun solveLine(line: Pair<List<ActiveWires>, List<ActiveWires>>): List<Int> {
     val (clues, displays) = line
 
-    val numToWiresMap: MutableMap<Int, Set<Char>> = mutableMapOf()
+    val numToWiresMap: MutableMap<Int, ActiveWires> = mutableMapOf()
     numToWiresMap[1] = clues.find { it.size == 2 }!!
     numToWiresMap[4] = clues.find { it.size == 4 }!!
     numToWiresMap[7] = clues.find { it.size == 3 }!!
@@ -55,7 +57,7 @@ fun solveLine(line: Pair<List<Set<Char>>, List<Set<Char>>>): List<Int> {
             numToWiresMap[2] = fiveClue
     }
     // We now know all digits. Reverse the map and parse the entries from the RHS
-    val reversed: Map<Set<Char>, Int> = numToWiresMap.entries.associate { entry -> Pair(entry.value, entry.key) }
+    val reversed: Map<ActiveWires, Int> = numToWiresMap.entries.associate { entry -> Pair(entry.value, entry.key) }
     return displays.map { reversed[it]!! }
 }
 

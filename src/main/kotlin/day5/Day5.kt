@@ -15,8 +15,10 @@ fun parseLinesFile(path: String): List<VentLine> {
 }
 
 
+typealias Coordinate = Pair<Int, Int>
+
 private fun List<VentLine>.countIntersections(): Long {
-    val counter: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
+    val counter: MutableMap<Coordinate, Int> = mutableMapOf()
     val pointsWithDuplicates = flatMap { it.coveredPoints() }
 
     for (point in pointsWithDuplicates) {

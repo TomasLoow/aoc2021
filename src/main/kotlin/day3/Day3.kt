@@ -3,10 +3,12 @@ package day3
 import DailyProblem
 import java.io.File
 
-fun parseBinaryFile(path: String): List<Array<Boolean>> {
+typealias BinaryArray = Array<Boolean>
+
+fun parseBinaryFile(path: String): List<BinaryArray> {
     val lines: List<String> = File(path).readLines()
     return lines.map {
-        val bs = Array(it.length) { false }
+        val bs = BinaryArray(it.length) { false }
         for ((idx, char) in it.toCharArray().withIndex()) {
             if (char == '1') bs[idx] = true
         }
@@ -19,7 +21,7 @@ enum class CountMode {
     LeastCommon,
 }
 
-fun findMostCommonByIndex(rows: List<Array<Boolean>>, idx: Int, mode: CountMode): Boolean {
+fun findMostCommonByIndex(rows: List<BinaryArray>, idx: Int, mode: CountMode): Boolean {
     var countTrue = 0
     var countFalse = 0
     for (row in rows) {
@@ -35,7 +37,7 @@ fun findMostCommonByIndex(rows: List<Array<Boolean>>, idx: Int, mode: CountMode)
     return (countTrue < countFalse)
 }
 
-fun binaryToInt(bits: Array<Boolean>): Int {
+fun binaryToInt(bits: BinaryArray): Int {
     var res = 0
     for (bit in bits) {
         res *= 2
@@ -45,7 +47,7 @@ fun binaryToInt(bits: Array<Boolean>): Int {
 }
 
 private fun bitCriteria(path: String, mode: CountMode): Int {
-    var rows: List<Array<Boolean>> = parseBinaryFile(path)
+    var rows: List<BinaryArray> = parseBinaryFile(path)
 
     val rowLength: Int = rows[0].size
 
@@ -66,8 +68,8 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
         val rowLength: Int = input[0].size
 
-        val delta: Array<Boolean> = Array(rowLength) { false }
-        val epsilon: Array<Boolean> = Array(rowLength) { false }
+        val delta: BinaryArray = BinaryArray(rowLength) { false }
+        val epsilon: BinaryArray = BinaryArray(rowLength) { false }
 
         for (idx in 0 until rowLength) {
             val mostCommon = findMostCommonByIndex(input, idx, CountMode.MostCommon)

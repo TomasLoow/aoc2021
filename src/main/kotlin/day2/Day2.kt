@@ -11,8 +11,9 @@ enum class Command {
     Up,
 }
 
+typealias CommandLine = Pair<Command, Int>
 
-fun parseCommandFile(path: String): List<Pair<Command, Int>> {
+fun parseCommandFile(path: String): List<CommandLine> {
     val lines: List<String> = File(path).readLines()
 
     return lines.map {
@@ -27,30 +28,32 @@ fun parseCommandFile(path: String): List<Pair<Command, Int>> {
 
         val arg = splitLine[1].toInt()
 
-        Pair(command, arg)
+        CommandLine(command, arg)
     }
 }
+
 
 /* Move one step with the rules from part 1 of the problem */
-fun updatePos(pos: Pair<Int, Int>, cmd: Pair<Command, Int>): Pair<Int, Int> {
+typealias SubmarineState = Pair<Int, Int>
+fun updatePos(state: SubmarineState, cmd: CommandLine): SubmarineState {
     val (command, arg) = cmd
-    val (x, depth) = pos
+    val (x, depth) = state
     return when (command) {
-        Command.Forward -> Pair(x + arg, depth)
-        Command.Up -> Pair(x, depth - arg)
-        Command.Down -> Pair(x, depth + arg)
+        Command.Forward -> SubmarineState(x + arg, depth)
+        Command.Up -> SubmarineState(x, depth - arg)
+        Command.Down -> SubmarineState(x, depth + arg)
     }
 }
 
-
 /* Move one step with the rules from part 2 of the problem */
-fun updatePosWithDelta(pos: Triple<Int, Int, Int>, cmd: Pair<Command, Int>): Triple<Int, Int, Int> {
+typealias SubmarineStateWithDelta = Triple<Int, Int, Int>
+fun updatePosWithDelta(state: SubmarineStateWithDelta, cmd: CommandLine): SubmarineStateWithDelta {
     val (command, arg) = cmd
-    val (x, depth, delta) = pos
+    val (x, depth, delta) = state
     return when (command) {
-        Command.Forward -> Triple(x + arg, depth + delta * arg, delta)
-        Command.Up -> Triple(x, depth, delta - arg)
-        Command.Down -> Triple(x, depth, delta + arg)
+        Command.Forward -> SubmarineStateWithDelta(x + arg, depth + delta * arg, delta)
+        Command.Up -> SubmarineStateWithDelta(x, depth, delta - arg)
+        Command.Down -> SubmarineStateWithDelta(x, depth, delta + arg)
     }
 }
 
@@ -60,7 +63,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
     override fun part1(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val initialState = Pair(0, 0)
+        val initialState = SubmarineState(0, 0)
         val (x, depth) = commands.fold(initialState) { pos, cmd -> updatePos(pos, cmd) }
 
         return (x * depth).toLong()
@@ -68,7 +71,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
     override fun part2(): Long {
         val commands = parseCommandFile(this.inputFilePath)
-        val initialState = Triple(0, 0, 0)
+        val initialState = SubmarineStateWithDelta(0, 0, 0)
         val (x, depth, _) = commands.fold(initialState) { pos, cmd -> updatePosWithDelta(pos, cmd) }
 
         return (x * depth).toLong()

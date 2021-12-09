@@ -5,7 +5,9 @@ import java.io.File
 import kotlin.math.absoluteValue
 import kotlin.math.min
 
-fun parseIntsOnOneLineFile(path: String): List<Long> {
+typealias CrabPositions = List<Long>
+
+fun parseIntsOnOneLineFile(path: String): CrabPositions {
     return File(path)
         .readLines()
         .single()
@@ -13,7 +15,7 @@ fun parseIntsOnOneLineFile(path: String): List<Long> {
         .map { it.toLong() }
 }
 
-private fun List<Long>.findBestPosition(): Long {
+private fun CrabPositions.findBestPosition(): Long {
     /*
     We know that the value as a function of a position is a convex function. So we can solve with a
     kind of binary search where we divide the range in half and looks at *two* values near the middle. We
@@ -40,7 +42,7 @@ private fun List<Long>.findBestPosition(): Long {
     )
 }
 
-private fun List<Long>.findPositionScore(pos: Long): Long {
+private fun CrabPositions.findPositionScore(pos: Long): Long {
     return sumOf { crabPosition ->
         // Use the formula for arithmetic sum. 1+2+...+n = n*(n+1)/2
         val distance = (crabPosition - pos).absoluteValue
