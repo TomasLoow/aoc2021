@@ -1,3 +1,5 @@
+import kotlin.time.ExperimentalTime
+
 val problems = listOf(
     day1.problem,
     day2.problem,
@@ -11,6 +13,9 @@ val problems = listOf(
     day10.problem,
 )
 
+@OptIn(ExperimentalTime::class)
 fun main() {
-    problems.forEach { it.run() }
+    problems.forEach { problem ->
+        problem.runBoth(timesToRun = 10)
+    }
 }

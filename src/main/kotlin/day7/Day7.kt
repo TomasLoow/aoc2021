@@ -69,6 +69,3 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 
 val problem = Problem("input/day7.txt")
 
-fun main() {
-    Problem("input/day7.txt").run()
-}
