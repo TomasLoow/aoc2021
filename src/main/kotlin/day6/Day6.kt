@@ -26,8 +26,11 @@ private fun simulate(fishesCounts: MutableList<Long>, steps: Int): Long {
     return fishesCounts.sum()
 }
 
-class Problem(override val inputFilePath: String, private val stepsPart1: Int, private val stepsPart2: Int) : DailyProblem {
+class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 6
+
+    private val stepsPart1 = 80
+    private val stepsPart2 = 256
 
     override fun part1(): Long {
         val fishesCounts = readFishesInput(inputFilePath)
@@ -40,4 +43,4 @@ class Problem(override val inputFilePath: String, private val stepsPart1: Int, p
     }
 }
 
-val problem = Problem("input/day6.txt", 80, 256)
+val problem = Problem("input/day6.txt")

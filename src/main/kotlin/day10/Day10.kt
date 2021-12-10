@@ -80,7 +80,7 @@ private fun fixScore(line: String): Long {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
 
-    override val number = 9
+    override val number = 10
 
     override fun part1(): Long {
         return File(inputFilePath)
