@@ -4,31 +4,27 @@ import DailyProblem
 import java.io.File
 
 fun parseLinesFile(path: String): List<VentLine> {
-    val lineRegex = """(\d+),(\d+) -> (\d+),(\d+)""".toRegex()
-
     val lines: List<String> = File(path).readLines()
     return lines.map { line ->
-        val matchResult = lineRegex.find(line)
-        val (startX, startY, endX, endY) = matchResult!!.destructured
+        val (from, to) = line.split(" -> ")
+        val (startX, startY) = from.split(",")
+        val (endX, endY) = to.split(",")
         VentLine(startX.toInt(), startY.toInt(), endX.toInt(), endY.toInt())
     }
 }
 
+typealias Coordinate = Int  // Dumb encoding to make Sets of coordinates work a lot faster.
 
-typealias Coordinate = Pair<Int, Int>
+fun buildCoordinate(x: Int, y: Int) = 10000 * x + y
 
 private fun List<VentLine>.countIntersections(): Long {
-    val counter: MutableMap<Coordinate, Int> = mutableMapOf()
-    val pointsWithDuplicates = flatMap { it.coveredPoints() }
-
-    for (point in pointsWithDuplicates) {
-        counter[point] = counter.getOrDefault(point, 0) + 1
-    }
-
-    return counter
-        .filter { it.value > 1 }
-        .size
-        .toLong()
+    val pointsWithDuplicates =
+        flatMap { it.coveredPoints() }.sorted()  // Actual order not important, we just want identical to be adjacent.
+    return pointsWithDuplicates
+        .windowed(2)
+        .filter { it.first() == it.last() }
+        .map { it.first() }  // Keep only those who are identical to it's successor in the list
+        .toSet().size.toLong()  // Count em up
 }
 
 class Problem(override val inputFilePath: String) : DailyProblem {
