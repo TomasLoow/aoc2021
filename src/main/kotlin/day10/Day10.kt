@@ -2,7 +2,7 @@ package day10
 
 import DailyProblem
 import java.io.File
-import java.util.*
+import java.util.Stack
 
 
 fun matchingParen(openingParen: Char): Char {

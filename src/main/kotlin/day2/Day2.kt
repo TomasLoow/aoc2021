@@ -2,7 +2,6 @@ package day2
 
 import DailyProblem
 import java.io.File
-import java.util.*
 
 
 enum class Command {
@@ -23,7 +22,7 @@ fun parseCommandFile(path: String): List<CommandLine> {
             "forward" -> Command.Forward
             "up" -> Command.Up
             "down" -> Command.Down
-            else -> throw InputMismatchException()
+            else -> throw Exception("Bad Command")
         }
 
         val arg = splitLine[1].toInt()
