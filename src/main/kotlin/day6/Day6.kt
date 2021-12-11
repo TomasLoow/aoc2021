@@ -28,6 +28,7 @@ private fun simulate(fishesCounts: MutableList<Long>, steps: Int): Long {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 6
+    override val name = "Lanternfish"
 
     private val stepsPart1 = 80
     private val stepsPart2 = 256

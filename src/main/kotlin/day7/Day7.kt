@@ -52,6 +52,7 @@ private fun CrabPositions.findPositionScore(pos: Long): Long {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 7
+    override val name = "The Treachery of Whales"
 
     override fun part1(): Long {
         val crabPositions = parseIntsOnOneLineFile(inputFilePath)

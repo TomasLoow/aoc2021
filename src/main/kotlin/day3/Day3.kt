@@ -62,6 +62,7 @@ private fun bitCriteria(path: String, mode: CountMode): Int {
 class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 3
+    override val name = "Binary Diagnostic"
 
     override fun part1(): Long {
         val input = parseBinaryFile(this.inputFilePath)

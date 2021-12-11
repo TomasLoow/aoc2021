@@ -29,6 +29,7 @@ private fun List<VentLine>.countIntersections(): Long {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 5
+    override val name = "Hydrothermal Venture"
 
     override fun part1(): Long {
         return parseLinesFile(inputFilePath)

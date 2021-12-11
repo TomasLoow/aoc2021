@@ -21,6 +21,8 @@ fun parseBingoFile(path: String): Pair<List<Int>, List<BingoBoard>> {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 4
+    override val name = "Giant Squid"
+
     override fun part1(): Long {
         val data: Pair<List<Int>, List<BingoBoard>> = parseBingoFile(this.inputFilePath)
 

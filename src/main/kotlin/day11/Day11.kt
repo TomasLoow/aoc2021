@@ -6,6 +6,7 @@ import DailyProblem
 class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 11
+    override val name = "Dumbo Octopus"
 
     override fun part1(): Long {
         val og = readGrid(inputFilePath)

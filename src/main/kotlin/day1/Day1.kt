@@ -22,6 +22,7 @@ private fun Collection<Int>.threeElementWindowSums(): Collection<Int> {
 class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 1
+    override val name = "Sonar Sweep"
 
     override fun part1(): Long {
         return parseIntsFile(this.inputFilePath)

@@ -4,13 +4,14 @@ import kotlin.time.measureTime
 
 interface DailyProblem {
     val number: Int
+    val name: String
     val inputFilePath: String
     fun part1(): Long
     fun part2(): Long
 
     @ExperimentalTime
     fun runBoth(timesToRun:Int = 1) : Duration {
-        println("=== Day $number ===")
+        println("=== Day $number : $name ===")
         var result1 = 0L
         var result2 = 0L
         val runDuration = measureTime{

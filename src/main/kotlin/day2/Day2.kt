@@ -59,6 +59,7 @@ fun updatePosWithDelta(state: SubmarineStateWithDelta, cmd: CommandLine): Submar
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 2
+    override val name = "Dive!"
 
     override fun part1(): Long {
         val commands = parseCommandFile(this.inputFilePath)

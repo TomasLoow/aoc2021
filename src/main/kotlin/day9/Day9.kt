@@ -23,6 +23,8 @@ private fun Collection<Int>.product(): Int {
 class Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 9
+    override val name = "Smoke Basin"
+
 
     override fun part1(): Long {
         val seaFloor = parseMap(inputFilePath)

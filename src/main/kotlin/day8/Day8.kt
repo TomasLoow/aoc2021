@@ -64,6 +64,7 @@ fun solveLine(line: Pair<List<ActiveWires>, List<ActiveWires>>): List<Int> {
 
 class Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 8
+    override val name = "Seven Segment Search"
 
     private fun Iterable<Int>.parseDecimal() : Int{
         return fold(0) {parsed, digit -> parsed*10 + digit }
