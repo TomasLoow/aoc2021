@@ -13,18 +13,10 @@ fun parseLinesFile(path: String): List<VentLine> {
     }
 }
 
-typealias Coordinate = Int  // Dumb encoding to make Sets of coordinates work a lot faster.
-
-fun buildCoordinate(x: Int, y: Int) = 10000 * x + y
-
 private fun List<VentLine>.countIntersections(): Long {
-    val pointsWithDuplicates =
-        flatMap { it.coveredPoints() }.sorted()  // Actual order not important, we just want identical to be adjacent.
-    return pointsWithDuplicates
-        .windowed(2)
-        .filter { it.first() == it.last() }
-        .map { it.first() }  // Keep only those who are identical to it's successor in the list
-        .toSet().size.toLong()  // Count em up
+    val array : Array<Int> = Array((VentLine.gridSize + 1) * (VentLine.gridSize + 1)) { 0 }
+    forEach { it.markCoveredPoints(array) }
+    return array.count { it > 1 }.toLong()
 }
 
 class Problem(override val inputFilePath: String) : DailyProblem {
