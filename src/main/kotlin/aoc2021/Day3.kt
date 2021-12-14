@@ -1,4 +1,4 @@
-package day3
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -59,7 +59,7 @@ private fun bitCriteria(path: String, mode: CountMode): Int {
     return binaryToInt(rows[0])
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day3Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 3
     override val name = "Binary Diagnostic"
@@ -92,4 +92,4 @@ class Problem(override val inputFilePath: String) : DailyProblem {
 }
 
 
-val problem = Problem("input/day3.txt")
+val day3Problem = Day3Problem("input/aoc2021/day3.txt")

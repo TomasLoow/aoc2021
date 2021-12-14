@@ -1,4 +1,4 @@
-package day13
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -63,7 +63,7 @@ private fun gridToStrings(pairCollection: Array<Point>): List<String> {
 }
 
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day13Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 13
 
@@ -91,4 +91,4 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day13.txt")
+val day13Problem = Day13Problem("input/aoc2021/day13.txt")

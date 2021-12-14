@@ -1,4 +1,4 @@
-package day7
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -50,7 +50,7 @@ private fun CrabPositions.findPositionScore(pos: Long): Long {
     }
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day7Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 7
     override val name = "The Treachery of Whales"
 
@@ -68,5 +68,5 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day7.txt")
+val day7Problem = Day7Problem("input/aoc2021/day7.txt")
 

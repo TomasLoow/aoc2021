@@ -1,8 +1,9 @@
-package day11
+package aoc2021
 
+import DailyProblem
 import java.io.File
 
-internal fun readGrid(path: String) =
+internal fun parseGrid(path: String) =
     OctopusGrid(File(path).readText().filter { it.isDigit() }.map { it.digitToIntOrNull()!! }
         .toTypedArray())
 
@@ -78,3 +79,30 @@ class OctopusGrid(val grid: Array<Int>) {
         return neighbours
     }
 }
+
+class Day11Problem(override val inputFilePath: String) : DailyProblem {
+
+    override val number = 11
+    override val name = "Dumbo Octopus"
+
+    override fun part1(): Long {
+        val og = parseGrid(inputFilePath)
+
+        val flashCount = (1..100).sumOf { og.step() }
+
+        return flashCount.toLong()
+    }
+
+    override fun part2(): Long {
+        val og = parseGrid(inputFilePath)
+
+        var step = 0L
+        do {
+            og.step()
+            step++
+        } while (!og.allZero())
+        return step
+    }
+}
+
+val day11Problem = Day11Problem("input/aoc2021/day11.txt")

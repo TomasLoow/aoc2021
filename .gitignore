@@ -1,5 +1,5 @@
 .idea
 .gradle
 build
-input/day*.txt
-input/downloadinfo.txt
+input/aoc????/day*.txt
+input/aoc2021/downloadinfo.txt

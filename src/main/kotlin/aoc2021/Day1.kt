@@ -1,4 +1,4 @@
-package day1
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -19,7 +19,7 @@ private fun Collection<Int>.threeElementWindowSums(): Collection<Int> {
         .map { it.sum() }
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day1Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 1
     override val name = "Sonar Sweep"
@@ -35,6 +35,6 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day1.txt")
+val day1Problem = Day1Problem("input/aoc2021/day1.txt")
 
 

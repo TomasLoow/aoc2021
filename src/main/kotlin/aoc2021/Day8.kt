@@ -1,4 +1,4 @@
-package day8
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -62,7 +62,7 @@ fun solveLine(line: Pair<List<ActiveWires>, List<ActiveWires>>): List<Int> {
 }
 
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day8Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 8
     override val name = "Seven Segment Search"
 
@@ -88,4 +88,4 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day8.txt")
+val day8Problem = Day8Problem("input/aoc2021/day8.txt")

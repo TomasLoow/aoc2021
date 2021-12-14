@@ -8,7 +8,7 @@ import java.io.File
 
 suspend fun main() {
 
-    val (sessionId, endDate) = File("input/downloadinfo.txt").readLines().let {
+    val (sessionId, endDate) = File("input/aoc2021/downloadinfo.txt").readLines().let {
             Pair(it[0], it[1].toInt())
         }
 
@@ -16,7 +16,7 @@ suspend fun main() {
         defaultRequest { header(HttpHeaders.Cookie, "session=$sessionId") }
     }.use { client ->
         for (day in 1..endDate) {
-            val fileName = "input/day$day.txt"
+            val fileName = "input/aoc2021/day$day.txt"
             val file = File(fileName)
             if (file.exists()) {
                 println("$fileName already exists, skipping.")

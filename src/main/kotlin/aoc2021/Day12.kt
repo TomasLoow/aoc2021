@@ -1,4 +1,4 @@
-package day12
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -23,7 +23,7 @@ fun cavesReachableFrom(map: CaveSystem, cave: Cave): Collection<Cave> {
     return map[cave]!!
 }
 
-fun readConnections(path: String): CaveSystem {
+fun parseConnections(path: String): CaveSystem {
     val connections = mutableListOf<Pair<Cave,Cave>>()
     val caveNameMap: MutableMap<String, Int> = mutableMapOf("start" to startCave, "end" to endCave)
     var nextNumber = 2
@@ -123,19 +123,19 @@ fun search(map: CaveSystem,
     return foundPaths
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day12Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 12
     override val name = "Passage Pathing"
 
     override fun part1(): Long {
-        val connections: CaveSystem = readConnections(inputFilePath)
+        val connections: CaveSystem = parseConnections(inputFilePath)
         return search(connections, allowRevisits = false, start = startCave, end = endCave).toLong()
     }
 
     override fun part2(): Long {
-        val connections: CaveSystem = readConnections(inputFilePath)
+        val connections: CaveSystem = parseConnections(inputFilePath)
         return search(connections, allowRevisits = true, start = startCave, end = endCave).toLong()
     }
 }
 
-val problem = Problem("input/day12.txt")
+val day12Problem = Day12Problem("input/aoc2021/day12.txt")

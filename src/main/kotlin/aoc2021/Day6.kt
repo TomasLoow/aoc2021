@@ -1,9 +1,9 @@
-package day6
+package aoc2021
 
 import DailyProblem
 import java.io.File
 
-fun readFishesInput(path: String): MutableList<Long> {
+fun parseFishesInput(path: String): MutableList<Long> {
     val fishesCounts = Array<Long>(9) { 0 }
 
     File(path).readLines()
@@ -26,7 +26,7 @@ private fun simulate(fishesCounts: MutableList<Long>, steps: Int): Long {
     return fishesCounts.sum()
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day6Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 6
     override val name = "Lanternfish"
 
@@ -34,14 +34,14 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     private val stepsPart2 = 256
 
     override fun part1(): Long {
-        val fishesCounts = readFishesInput(inputFilePath)
+        val fishesCounts = parseFishesInput(inputFilePath)
         return simulate(fishesCounts, stepsPart1)
     }
 
     override fun part2(): Long {
-        val fishesCounts = readFishesInput(inputFilePath)
+        val fishesCounts = parseFishesInput(inputFilePath)
         return simulate(fishesCounts, stepsPart2)
     }
 }
 
-val problem = Problem("input/day6.txt")
+val day6Problem = Day6Problem("input/aoc2021/day6.txt")

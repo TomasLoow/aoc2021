@@ -1,4 +1,4 @@
-package day2
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -57,7 +57,7 @@ fun updatePosWithDelta(state: SubmarineStateWithDelta, cmd: CommandLine): Submar
 }
 
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day2Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 2
     override val name = "Dive!"
 
@@ -78,4 +78,4 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day2.txt")
+val day2Problem = Day2Problem("input/aoc2021/day2.txt")

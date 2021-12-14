@@ -1,4 +1,4 @@
-package day14
+package aoc2021
 
 import DailyProblem
 import java.io.File
@@ -43,12 +43,12 @@ private fun <K> MutableMap<K, Long>.increase(key: K, value: Long) {
     this[key] = getOrDefault(key, 0L) + value
 }
 
-class Problem(override val inputFilePath: String) : DailyProblem {
+class Day14Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 14
     override val name = "Extended Polymerization"
 
     private fun runRules(startCounts: PairCount, rules: Rules, startChain: String, steps: Int): Long {
-        val afterApplyingRules = (1..steps).fold(startCounts) { acc, i ->
+        val afterApplyingRules = (1..steps).fold(startCounts) { acc, _ ->
             applyRule(acc, rules)
         }
 
@@ -74,4 +74,4 @@ class Problem(override val inputFilePath: String) : DailyProblem {
     }
 }
 
-val problem = Problem("input/day14.txt")
+val day14Problem = Day14Problem("input/aoc2021/day14.txt")
