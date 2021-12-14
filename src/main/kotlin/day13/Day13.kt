@@ -51,7 +51,7 @@ private fun parseFoldingFile(path: String): Pair<Array<Point>, List<Fold>> {
     return Pair(grid, folds)
 }
 
-private fun gridToStrings(pairCollection: Collection<Point>): List<String> {
+private fun gridToStrings(pairCollection: Array<Point>): List<String> {
     val maxX = pairCollection.maxOf { it.first }
     val maxY = pairCollection.maxOf { it.second }
 
@@ -85,7 +85,7 @@ class Problem(override val inputFilePath: String) : DailyProblem {
         folds.forEach { fold ->
                 fold.applyToGrid(grid)
         }
-        //display = gridToStrings(fullFolded)
+        display = gridToStrings(grid)
         //display.forEach(::println)
         return -999  // Not an integer solution. Answers stored in display attribute instead
     }
