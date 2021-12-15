@@ -44,6 +44,7 @@ internal class MultiTest {
             Arguments.of(12, aoc2021.Day12Problem("input/aoc2021/testinput/day12.txt"), 10, 36),
 
             Arguments.of(14, aoc2021.Day14Problem("input/aoc2021/testinput/day14.txt"), 1588, 2188189693529),
+            Arguments.of(15, aoc2021.Day15Problem("input/aoc2021/testinput/day15.txt"), 40, 315),
         )
     }
 
