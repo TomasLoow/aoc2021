@@ -89,7 +89,7 @@ fun parseBit(input: List<Int>): ParseResult<Int, Boolean> {
 fun parsePentaBytes(input: List<Int>): ParseResult<Int, Long> {
     var res = 0L
     var eatenBytes = 0
-    for (chunk in input.chunked(5)) {
+    for (chunk in input.asSequence().chunked(5)) {
         val lastChunk = (chunk.first() == 0)
 
         res = 16*res + chunk.drop(1).bitsToInt()
