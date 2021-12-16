@@ -13,6 +13,7 @@ internal class MultiTest {
         expected_1: Long,
         _expected_2: Long
     ) {
+        problem.commonParts()
         assertEquals(expected_1, problem.part1(), "Solution for Day $day part 1 should be correct")
     }
 
@@ -24,6 +25,7 @@ internal class MultiTest {
         _expected_1: Long,
         expected_2: Long
     ) {
+        problem.commonParts()
         assertEquals(expected_2, problem.part2(), "Solution for Day $day part 2 should be correct")
     }
 

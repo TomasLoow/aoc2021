@@ -98,12 +98,15 @@ fun <M, N> aStar(map: M,
 
 class Day15Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 14
-
-
     override val name = "Chiton"
 
+    private lateinit var risks: Array<Array<Int>>
+
+    override fun commonParts() {
+        this.risks = parseRiskMap(inputFilePath)
+    }
+
     override fun part1(): Long {
-        val risks = parseRiskMap(inputFilePath)
         val maxX = risks[0].size-1
         val maxY = risks.size-1
 
@@ -116,7 +119,6 @@ class Day15Problem(override val inputFilePath: String) : DailyProblem {
     }
 
     override fun part2(): Long {
-        val risks = parseRiskMap(inputFilePath)
         val moreRisks = embiggen(risks)
         val maxX = moreRisks[0].size - 1
         val maxY = moreRisks.size - 1

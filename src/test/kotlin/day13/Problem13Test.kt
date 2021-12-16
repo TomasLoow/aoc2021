@@ -10,12 +10,14 @@ internal class Problem13Test {
     @Test
     fun part1() {
         val problem = Day13Problem("input/aoc2021/testinput/day13.txt")
+        problem.commonParts()
         assertEquals(problem.part1(), 17)
     }
 
     @Test
     fun part2() {
         val problem = Day13Problem("input/aoc2021/testinput/day13.txt")
+        problem.commonParts()
         problem.part2()
         val expected = listOf<String>(
             "#####",

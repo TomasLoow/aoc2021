@@ -70,19 +70,21 @@ class Day8Problem(override val inputFilePath: String) : DailyProblem {
         return fold(0) {parsed, digit -> parsed*10 + digit }
     }
 
-    override fun part1(): Long {
+    lateinit var solved: List<List<Int>>
+
+    override fun commonParts() {
         val lines = parseDisplaysFile(inputFilePath)
+        solved = lines.map { solveLine(it) }
+    }
+
+    override fun part1(): Long {
 
         val interestingDigits = setOf(1, 4, 7, 8)
-
-        val solved: List<List<Int>> = lines.map { solveLine(it) }
         return solved.sumOf { digits ->
             digits.count { digit -> interestingDigits.contains(digit) }
         }.toLong()
     }
     override fun part2(): Long {
-        val lines = parseDisplaysFile(inputFilePath)
-        val solved = lines.map { solveLine(it) }
         val converted = solved.map { digits -> digits.parseDecimal() }
         return converted.sum().toLong()
     }

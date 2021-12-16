@@ -6,6 +6,7 @@ interface DailyProblem {
     val number: Int
     val name: String
     val inputFilePath: String
+    fun commonParts() {}
     fun part1(): Long
     fun part2(): Long
 
@@ -16,6 +17,7 @@ interface DailyProblem {
         var result2 = 0L
         val runDuration = measureTime{
             (1..timesToRun).forEach {
+                this.commonParts()
                 result1 = this.part1()
                 result2 = this.part2()
             }

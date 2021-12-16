@@ -145,20 +145,21 @@ class Packet(val version: Int, val type: Int, val value: Long, val children: Lis
 }
 
 class Day16Problem(override val inputFilePath: String) : DailyProblem {
-
     override val number: Int = 16
-
     override val name: String = "Packet Decoder"
 
-    override fun part1(): Long {
+    private lateinit var packet: Packet
+
+    override fun commonParts() {
         val binaryString: List<Int> = parseHexFileToBinary(inputFilePath)
-        val (packet, _) = packetParser(binaryString)
+        val (parsedPacket, _) = packetParser(binaryString)
+        this.packet = parsedPacket
+    }
+    override fun part1(): Long {
         return packet.sumVersions().toLong()
     }
 
     override fun part2(): Long {
-        val binaryString: List<Int> = parseHexFileToBinary(inputFilePath)
-        val (packet, _) = packetParser(binaryString)
         return packet.calcValue()
     }
 }

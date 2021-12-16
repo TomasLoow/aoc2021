@@ -23,21 +23,24 @@ private fun Collection<Int>.product(): Int {
 class Day9Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 9
+
     override val name = "Smoke Basin"
 
+    private lateinit var lowestPoints: List<Pair<Int, Int>>
+    private lateinit var seaFloor: SeaFloor
 
-    override fun part1(): Long {
-        val seaFloor = parseMap(inputFilePath)
-        return seaFloor
+    override fun commonParts() {
+        seaFloor = parseMap(inputFilePath)
+        lowestPoints = seaFloor
             .findLowestPoints()
+    }
+    override fun part1(): Long {
+        return lowestPoints
             .sumOf { seaFloor.valueAt(it) + 1 }
             .toLong()
     }
 
     override fun part2(): Long {
-        val seaFloor = parseMap(inputFilePath)
-        val lowestPoints = seaFloor
-            .findLowestPoints()
 
         return lowestPoints
             .map { p ->

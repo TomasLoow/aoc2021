@@ -66,13 +66,17 @@ private fun gridToStrings(pairCollection: Array<Point>): List<String> {
 class Day13Problem(override val inputFilePath: String) : DailyProblem {
 
     override val number = 13
-
     override val name = "Transparent Origami"
 
     lateinit var display : List<String>  // We will put the answer to part 2 here
 
+    private lateinit var parseResult: Pair<Array<Point>, List<Fold>>
+
+    override fun commonParts() {
+        parseResult = parseFoldingFile(inputFilePath)
+    }
     override fun part1(): Long {
-        val (grid, folds) = parseFoldingFile(inputFilePath)
+        val (grid, folds) = parseResult
         val firstFold = folds.first()
 
         firstFold.applyToGrid(grid)
@@ -80,7 +84,7 @@ class Day13Problem(override val inputFilePath: String) : DailyProblem {
     }
 
     override fun part2(): Long {
-        val (grid, folds) = parseFoldingFile(inputFilePath)
+        val (grid, folds) = parseResult
 
         folds.forEach { fold ->
                 fold.applyToGrid(grid)

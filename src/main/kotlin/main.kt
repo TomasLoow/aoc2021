@@ -22,7 +22,7 @@ val problems = listOf(
 @OptIn(ExperimentalTime::class)
 fun main() {
     val durations = problems.map { problem ->
-        val dur = problem.runBoth(timesToRun = 1)
+        val dur = problem.runBoth(timesToRun = 100)
         Pair(problem.number, dur)
     }.toMap()
     println("=== Timing summary ===")

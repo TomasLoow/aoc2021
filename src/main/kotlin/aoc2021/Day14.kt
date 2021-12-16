@@ -47,6 +47,8 @@ class Day14Problem(override val inputFilePath: String) : DailyProblem {
     override val number = 14
     override val name = "Extended Polymerization"
 
+    private lateinit var parsedProblem: Triple<Map<String, Long>, Map<String, List<String>>, String>
+
     private fun runRules(startCounts: PairCount, rules: Rules, startChain: String, steps: Int): Long {
         val afterApplyingRules = (1..steps).fold(startCounts) { acc, _ ->
             applyRule(acc, rules)
@@ -63,13 +65,16 @@ class Day14Problem(override val inputFilePath: String) : DailyProblem {
         return res / 2
     }
 
+    override fun commonParts() {
+        this.parsedProblem = parsePolyFile(inputFilePath)
+    }
     override fun part1(): Long {
-        val (startCounts, rules, startChain) = parsePolyFile(inputFilePath)
+        val (startCounts, rules, startChain) = parsedProblem
         return runRules(startCounts, rules, startChain, 10)
     }
 
     override fun part2(): Long {
-        val (startCounts, rules, startChain) = parsePolyFile(inputFilePath)
+        val (startCounts, rules, startChain) = parsedProblem
         return runRules(startCounts, rules, startChain, 40)
     }
 }
