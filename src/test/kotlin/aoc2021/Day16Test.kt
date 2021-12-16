@@ -11,26 +11,6 @@ internal class Day16Test {
 
 
     @Test
-    fun combineNTimes() {
-        val example = "11100111011".toList().map {it -> it.digitToInt() }
-        val parser =combineNTimes(3, parseNary(3))
-        val (res, rest) = parser(example)
-
-        assertEquals(listOf(7,1,6), res)
-        assertEquals(listOf(1,1), rest)
-    }
-
-    @Test
-    fun combineNBytes() {
-        val example = "11100111011000110".toList().map {it -> it.digitToInt() }
-        val parser = combineNBytes(16, parseNary(4))
-        val (res, rest) = parser(example)
-
-        assertEquals(listOf(14,7,6,3), res)
-        assertEquals(listOf(0), rest)
-    }
-
-    @Test
     fun packetParserLiteral() {
         val example = "110100101111111000101000".toList().map {it -> it.digitToInt() }
         val (packet, rest) = packetParser(example)

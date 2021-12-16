@@ -1,46 +1,9 @@
 package aoc2021
 
 import DailyProblem
+import parserCombinators.*
 import java.io.File
 import kotlin.time.ExperimentalTime
-
-typealias ParseResult<Token, Res> = Pair<Res, List<Token>>
-typealias Parser<Token, Res> = (List<Token>) -> ParseResult<Token, Res>
-
-fun <Token, A,B> combineTwo(parser1 : Parser<Token, A>, parser2: Parser<Token, B>): Parser<Token, Pair<A,B>> {
-    return { input ->
-        val (a, rest1) = parser1(input)
-        val (b, rest2) = parser2(rest1)
-        Pair(Pair(a,b), rest2)
-    }
-}
-
-fun <Token, A> combineNTimes(numChildren: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
-    return { input ->
-        var rest = input
-        val res = (1..numChildren).map {
-            val (a, rest1) = parser(rest)
-            rest = rest1
-            a
-        }
-        Pair(res, rest)
-    }
-}
-
-fun <Token, A> combineNBytes(numBytes: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
-    if (numBytes == 0) {
-        return { input -> Pair(emptyList(), input) }
-    }
-    return { input ->
-        val res = mutableListOf<A>()
-        val (elem, rest) = parser(input)
-        val consumedBytes = input.size - rest.size
-        val (elems, rest2) = combineNBytes(numBytes-consumedBytes, parser)(rest)
-        res.add(elem)
-        res.addAll(elems)
-        Pair(res.toList(), rest2)
-    }
-}
 
 private fun parseHexFileToBinary(path: String): List<Int> {
     return File(path).readLines().first().hexToBits()
@@ -75,8 +38,9 @@ fun List<Int>.bitsToInt() : Int {
     return fold(0){ acc, i -> acc*2+i}
 }
 
-fun parseNary(numBits: Int): Parser<Int, Int> {
+fun parseFixLenghtBinaryInt(numBits: Int): Parser<Int, Int> {
     return { input ->
+        if (input.size < numBits) throw NoMatchException("Too few elements to parse $numBits-length binary number")
         val num = input.take(numBits).bitsToInt()
         Pair(num, input.drop(numBits))
     }
@@ -100,23 +64,36 @@ fun parsePentaBytes(input: List<Int>): ParseResult<Int, Long> {
 }
 
 fun packetParser(input: List<Int>): ParseResult<Int, Packet> {
-    val header = combineTwo(parseNary(3), parseNary(3))
-    val (vt,rest1) = header(input)
-    val (version, type) = vt
+    val headerParser = parsePair(
+        parseFixLenghtBinaryInt(3),
+        parseFixLenghtBinaryInt(3))
+    val (header,rest1) = headerParser(input)
+    val (version, type) = header
 
     if (type == 4) {
+
         val (value, rest3) = parsePentaBytes(rest1)
         return Pair(Packet(version=version, type=type, value=value), rest3)
+
     } else {
+
         val (lenghtType, rest2) = parseBit(rest1)
 
         if (lenghtType) {
-            val (numChildren, rest4) = parseNary(11)(rest2)
-            val (children : List<Packet>, rest5) = combineNTimes(numChildren, ::packetParser)(rest4)
+            val (numChildren, rest4) = parseFixLenghtBinaryInt(11)(rest2)
+
+            val parseChildren  = parseManySpecificCount(numChildren) { it: List<Int> -> packetParser(it) }
+            val (children : List<Packet>, rest5) = parseChildren(rest4)
+
             return Pair(Packet(version=version, type=type, value=0, children=children), rest5)
+
         } else {
-            val (numBytes, rest4) = parseNary(15)(rest2)
-            val (children : List<Packet>, rest5) = combineNBytes(numBytes, ::packetParser)(rest4)
+
+            val (numBytes, rest4) = parseFixLenghtBinaryInt(15)(rest2)
+
+            val parseChildren  = parseManySpecificTokenCount(numBytes) { it: List<Int> -> packetParser(it) }
+            val (children : List<Packet>, rest5) = parseChildren(rest4)
+
             return Pair(Packet(version=version, type=type, value=0, children=children), rest5)
         }
     }
@@ -167,5 +144,5 @@ class Day16Problem(override val inputFilePath: String) : DailyProblem {
 val day16Problem = Day16Problem("input/aoc2021/day16.txt")
 @OptIn(ExperimentalTime::class)
 fun main() {
-    day16Problem.runBoth(1000)
+    day16Problem.runBoth(100)
 }
