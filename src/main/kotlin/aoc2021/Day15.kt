@@ -5,15 +5,16 @@ import java.io.File
 import java.util.*
 import kotlin.time.ExperimentalTime
 
-typealias RiskMap = Array<Array<Int>>
+typealias RiskMap2D = Array<Array<Int>>
+typealias RiskMap = Array<Int>
 
-fun parseRiskMap(path:String): RiskMap {
+fun parseRiskMap(path:String): RiskMap2D {
     return File(path).readLines().map { line ->
         line.map { char -> char.digitToInt() }.toTypedArray()
     }.toTypedArray()
  }
 
-private fun embiggen(map: RiskMap): RiskMap {
+private fun embiggen(map: RiskMap2D): RiskMap2D {
     val factor = 5
     val originalWidth = map.size
     val originalHeight = map[0].size
@@ -34,39 +35,37 @@ private fun embiggen(map: RiskMap): RiskMap {
     return biggerArray
 }
 
-fun heuristic(map: RiskMap, pos: Coordinate): Int {
+fun heuristic(map: RiskMap, pos: Int): Int {
     return 0  // 0 means it's actually djikstra's algorithm. The manhattan heuristics did not really help
     // return (map.size - pos.second) + (map[0].size - pos.first)
 }
 
-fun getRisk(map: RiskMap, from:Coordinate, to:Coordinate): Int {
-    return map[to.second][to.first]
+fun getRisk(map: RiskMap, from:Int, to:Int): Int {
+    return map[to]
 }
 
-fun neighboursOf(map: RiskMap,coord: Coordinate): Collection<Coordinate> {
-    val (x, y) = coord
-    val maxX = map[0].size-1
-    val maxY = map.size-1
-    return buildList {
-        if (x>0) add(Pair(x-1,y))
-        if (x<maxX) add(Pair(x+1,y))
-        if (y>0) add(Pair(x, y-1))
-        if (y<maxY) add(Pair(x,y+1))
+fun neighboursOfForSize(size: Int): (RiskMap, Int) -> Sequence<Int> {
+    return { intsmap, idx ->
+        val x = idx.mod(size)
+        val y = idx/size
+
+        val maxX = size-1
+        val maxY = size-1
+
+        sequence {
+            if (x>0) yield(idx-1)
+            if (x<maxX) yield(idx+1)
+            if (y>0) yield(idx-size)
+            if (y<maxY) yield(idx+size)
+        }
     }
-
 }
-
-fun <K> Map<K, Int>.getOrInf(key :K ) : Int {
-    return getOrDefault(key, Int.MAX_VALUE)
-}
-
-
 
 fun <M, N> aStar(map: M,
                  start: N,
                  goal: N,
                  heur: (M, N)-> Int,
-                 neigh: (M, N) -> Collection<N>,
+                 neigh: (M, N) -> Sequence<N>,
                  getEdgeValue: (M, N, N) -> Int): Int {
     val openSet = PriorityQueue<Pair<Int,N>>(compareBy { it.first })
     openSet.add(heur(map,start) to start)
@@ -84,8 +83,14 @@ fun <M, N> aStar(map: M,
         openSet.remove(currentPair)
 
         for (neighbour: N in neigh(map, current)) {
-            val tentative_gScore = cheapestPathScoreMap.getOrInf(current) + getEdgeValue(map, current, neighbour)
-            if (tentative_gScore < cheapestPathScoreMap.getOrInf(neighbour)) {
+            var neighbourValue: Int
+            try {
+                neighbourValue = getEdgeValue(map, current, neighbour)
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                continue
+            }
+            val tentative_gScore = cheapestPathScoreMap.getOrDefault(current, Int.MAX_VALUE) + neighbourValue
+            if (tentative_gScore < cheapestPathScoreMap.getOrDefault(neighbour, Int.MAX_VALUE)) {
                 cameFrom[neighbour] = current
                 cheapestPathScoreMap[neighbour] = tentative_gScore
                 heuristicScoreMap[neighbour] = tentative_gScore + heur(map, neighbour)
@@ -97,7 +102,7 @@ fun <M, N> aStar(map: M,
 }
 
 class Day15Problem(override val inputFilePath: String) : DailyProblem {
-    override val number = 14
+    override val number = 15
     override val name = "Chiton"
 
     private lateinit var risks: Array<Array<Int>>
@@ -107,27 +112,23 @@ class Day15Problem(override val inputFilePath: String) : DailyProblem {
     }
 
     override fun part1(): Long {
-        val maxX = risks[0].size-1
-        val maxY = risks.size-1
-
-        return aStar<RiskMap, Coordinate>(risks,
-            Pair(0, 0),
-            Pair(maxX, maxY),
+        val flattened = risks.flatten().toTypedArray()
+        return aStar<RiskMap, Int>(flattened,
+            0,
+            flattened.size - 1,
             ::heuristic,
-            ::neighboursOf,
+            neighboursOfForSize(risks[0].size),
             ::getRisk).toLong()
     }
 
     override fun part2(): Long {
         val moreRisks = embiggen(risks)
-        val maxX = moreRisks[0].size - 1
-        val maxY = moreRisks.size - 1
-
-        return aStar<RiskMap, Coordinate>(moreRisks,
-            Pair(0, 0),
-            Pair(maxX, maxY),
+        val flattened = moreRisks.flatten().toTypedArray()
+        return aStar<RiskMap, Int>(flattened,
+            0,
+            flattened.size - 1,
             ::heuristic,
-            ::neighboursOf,
+            neighboursOfForSize(moreRisks[0].size),
             ::getRisk).toLong()
     }
 }
@@ -136,5 +137,5 @@ val day15Problem = Day15Problem("input/aoc2021/day15.txt")
 
 @OptIn(ExperimentalTime::class)
 fun main() {
-    day15Problem.runBoth(100)
+    day15Problem.runBoth(5)
 }
