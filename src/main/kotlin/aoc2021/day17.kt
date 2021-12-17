@@ -1,6 +1,7 @@
 package aoc2021
 
 import DailyProblem
+import parserCombinators.*
 import java.io.File
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -8,10 +9,17 @@ import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 
 private fun parseTrickShot(path: String): List<Int> {
-    val line = File(path).readLines().single()
-    val regex = Regex("target area: x=([0-9]+)..([0-9]+), y=([-0-9]+)..([-0-9]+)")
-    val groupValues = regex.matchEntire(line)?.groupValues
-    return groupValues?.drop(1)?.map { it.toInt() }!!
+    val line = File(path).readLines().single().toList()
+
+    val pminX = literal("target area: x=".toList()) thenDo ::parseInt
+    val pmaxX = literal("..".toList()) thenDo ::parseInt
+    val pminY = literal(", y=".toList()) thenDo ::parseInt
+    val pmaxY = literal("..".toList()) thenDo ::parseInt
+    val parser: Parser<Char,List<Int>> = parseList(listOf(pminX, pmaxX, pminY, pmaxY))
+
+
+    val (res, _) = parser(line)
+    return res
 }
 
 class Day17Problem(override val inputFilePath: String) : DailyProblem {

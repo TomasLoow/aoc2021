@@ -3,6 +3,7 @@ package parserCombinators
 import aoc2021.parseFixLenghtBinaryInt
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 internal class ParserCombinatorsKtTest {
@@ -58,6 +59,18 @@ internal class ParserCombinatorsKtTest {
                 parser("qux is a bit silly".toList())
             }
         )
+    }
+
+    @Test
+    fun testParseList() {
+        val pfirst = (literal(listOf('(')) thenDo ::parseInt)
+        val pmid = (literal(listOf(',')) thenDo ::parseInt)
+        val plast = (literal(listOf(',')) thenDo ::parseInt) ignoring literal(listOf(')'))
+
+        val pCommaList = parseList(listOf(pfirst, pmid, pmid, plast))
+
+        val (res, _) = pCommaList("(13,4,7,99)".toList())
+        assertEquals(listOf(13,4,7,99), res)
     }
 
     @Test

@@ -15,6 +15,22 @@ fun <Token, A,B,C> combineTwo(parser1 : Parser<Token, A>, parser2: Parser<Token,
 
 fun <Token, A,B> parsePair(parser1 : Parser<Token, A>, parser2: Parser<Token, B>): Parser<Token, Pair<A, B>> = combineTwo(parser1,parser2) { a, b -> Pair(a,b) }
 
+
+fun <Token, Res> parseList(parserList: List<Parser<Token,Res>>): Parser<Token, List<Res>> {
+    return { input ->
+        val res = mutableListOf<Res>()
+        var leftOfInput = input
+        for (parser in parserList) {
+            val (elem, rest) = parser(leftOfInput)
+            leftOfInput = rest
+            res.add(elem)
+        }
+        Pair(res, leftOfInput.toList())
+    }
+
+}
+
+
 fun <Token, A> parseManySpecificCount(numChildren: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
     return { input ->
         var rest = input
@@ -80,8 +96,8 @@ fun <Token, A>  oneOf(parser: Parser<Token, A>, parser2: Parser<Token, A>): Pars
 }
 
 fun parseInt(input: List<Char>) : ParseResult<Char, Int> {
-    val digits = input.takeWhile { it.isDigit() }.map { it.digitToInt() }
+    val digits = input.takeWhile { it.isDigit() || it == '-'}
     if (digits.isEmpty()) throw NoMatchException("No integer found")
 
-    return Pair(digits.reduce {acc, d -> acc*10+d }, input.drop(digits.size))
+    return Pair(digits.joinToString("").toInt(), input.drop(digits.size))
 }
