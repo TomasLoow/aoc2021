@@ -17,6 +17,7 @@ val problems = listOf(
     aoc2021.day14Problem,
     aoc2021.day15Problem,
     aoc2021.day16Problem,
+    aoc2021.day17Problem,
 )
 
 @OptIn(ExperimentalTime::class)
