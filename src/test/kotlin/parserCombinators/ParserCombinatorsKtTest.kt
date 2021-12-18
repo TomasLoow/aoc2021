@@ -1,6 +1,6 @@
 package parserCombinators
 
-import aoc2021.parseFixLenghtBinaryInt
+import aoc2021.pFixLenghtBinaryInt
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -12,7 +12,7 @@ internal class ParserCombinatorsKtTest {
     @Test
     fun parseManySpecificCount() {
         val example = "11100111011".toList().map {it -> it.digitToInt() }
-        val parser = parseManySpecificCount(3, parseFixLenghtBinaryInt(3))
+        val parser = pManySpecificCount(3, pFixLenghtBinaryInt(3))
         val (res, rest) = parser(example)
 
         Assertions.assertEquals(listOf(7, 1, 6), res)
@@ -23,7 +23,7 @@ internal class ParserCombinatorsKtTest {
     @Test
     fun parseManySpecificTokenCount() {
         val example = "11100111011000110".toList().map {it -> it.digitToInt() }
-        val parser = parseManySpecificTokenCount(16, parseFixLenghtBinaryInt(4))
+        val parser = pManySpecificTokenCount(16, pFixLenghtBinaryInt(4))
         val (res, rest) = parser(example)
 
         Assertions.assertEquals(listOf(14, 7, 6, 3), res)
@@ -33,7 +33,7 @@ internal class ParserCombinatorsKtTest {
 
     @Test
     fun oneOfBinary() {
-        val parser = oneOf(parseFixLenghtBinaryInt(5), parseFixLenghtBinaryInt(3))
+        val parser = pOneOf(pFixLenghtBinaryInt(5), pFixLenghtBinaryInt(3))
         val example1 = listOf(1,1,0,1,1)  // 27
         val (res1, _) = parser(example1)
         Assertions.assertEquals(27, res1)
@@ -44,9 +44,9 @@ internal class ParserCombinatorsKtTest {
 
     @Test
     fun oneOfStrings() {
-        val fooParser = literal<Char>("foo".toList())
-        val barParser = literal<Char>("bar".toList())
-        val parser = oneOf(fooParser, barParser)
+        val fooParser = pLiteral<Char>("foo".toList())
+        val barParser = pLiteral<Char>("bar".toList())
+        val parser = pOneOf(fooParser, barParser)
 
         val (_, rest) = parser("foo is a good variable name".toList())
         Assertions.assertEquals(" is a good variable name".toList(), rest)
@@ -63,11 +63,11 @@ internal class ParserCombinatorsKtTest {
 
     @Test
     fun testParseList() {
-        val pfirst = (literal(listOf('(')) thenDo ::parseInt)
-        val pmid = (literal(listOf(',')) thenDo ::parseInt)
-        val plast = (literal(listOf(',')) thenDo ::parseInt) ignoring literal(listOf(')'))
+        val pfirst = (pToken('(') thenDo ::pInt)
+        val pmid = (pToken(',') thenDo ::pInt)
+        val plast = (pToken(',') thenDo ::pInt) thenIgnore pToken(')')
 
-        val pCommaList = parseList(listOf(pfirst, pmid, pmid, plast))
+        val pCommaList = pList(listOf(pfirst, pmid, pmid, plast))
 
         val (res, _) = pCommaList("(13,4,7,99)".toList())
         assertEquals(listOf(13,4,7,99), res)
@@ -75,12 +75,12 @@ internal class ParserCombinatorsKtTest {
 
     @Test
     fun parseInt() {
-        val (i, _) = parseInt("1729".toList())
+        val (i, _) = pInt("1729".toList())
         Assertions.assertEquals(1729, i)
 
         assertFailsWith<NoMatchException>(
             block = {
-                parseInt("bob".toList())
+                pInt("bob".toList())
             }
         )
     }
@@ -88,7 +88,7 @@ internal class ParserCombinatorsKtTest {
     @Test
     fun parenthesizedInt() {
 
-        val parenthesizedInt : Parser<Char, Int> = (literal(listOf('(')) thenDo ::parseInt) ignoring literal(listOf(')'))
+        val parenthesizedInt : Parser<Char, Int> = (pToken('(') thenDo ::pInt) thenIgnore pToken(')')
 
         val (i, _) = parenthesizedInt("(172)".toList())
         Assertions.assertEquals(172, i)

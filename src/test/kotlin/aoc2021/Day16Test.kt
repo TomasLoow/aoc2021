@@ -13,7 +13,7 @@ internal class Day16Test {
     @Test
     fun packetParserLiteral() {
         val example = "110100101111111000101000".toList().map {it -> it.digitToInt() }
-        val (packet, rest) = packetParser(example)
+        val (packet, rest) = pPacket(example)
         assertEquals(2021, packet.value)
         assertEquals(listOf(0,0,0), rest)
     }
@@ -21,7 +21,7 @@ internal class Day16Test {
     @Test
     fun packetParserComplex() {
         val example = "00111000000000000110111101000101001010010001001000000000".toList().map {it -> it.digitToInt() }
-        val (packet, rest) = packetParser(example)
+        val (packet, rest) = pPacket(example)
         assertEquals(0, packet.value)
         assertTrue(rest.all { it == 0 })
         assertEquals(7, rest.size)
@@ -32,7 +32,7 @@ internal class Day16Test {
     @MethodSource("testCases")
     fun part2Examples(hexString: String, expected:Long) {
         val example = hexString.hexToBits()
-        val (packet, _) = packetParser(example)
+        val (packet, _) = pPacket(example)
         assertEquals(expected, packet.calcValue())
     }
 

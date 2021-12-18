@@ -5,7 +5,7 @@ typealias Parser<Token, Res> = (List<Token>) -> ParseResult<Token, Res>
 
 class NoMatchException(message:String): Exception(message)
 
-fun <Token, A,B,C> combineTwo(parser1 : Parser<Token, A>, parser2: Parser<Token, B>, combiner: (A,B) -> C): Parser<Token, C> {
+fun <Token, A,B,C> pCombineTwo(parser1 : Parser<Token, A>, parser2: Parser<Token, B>, combiner: (A, B) -> C): Parser<Token, C> {
     return { input ->
         val (a, rest1) = parser1(input)
         val (b, rest2) = parser2(rest1)
@@ -13,10 +13,17 @@ fun <Token, A,B,C> combineTwo(parser1 : Parser<Token, A>, parser2: Parser<Token,
     }
 }
 
-fun <Token, A,B> parsePair(parser1 : Parser<Token, A>, parser2: Parser<Token, B>): Parser<Token, Pair<A, B>> = combineTwo(parser1,parser2) { a, b -> Pair(a,b) }
+fun <Token, A,B> pApplyFun(parser: Parser<Token, A>, f : (A) -> B): Parser<Token, B> {
+    return { input ->
+        val (a, rest) = parser(input)
+        Pair(f(a), rest)
+    }
+}
+
+fun <Token, A,B> pPair(parser1 : Parser<Token, A>, parser2: Parser<Token, B>): Parser<Token, Pair<A, B>> = pCombineTwo(parser1,parser2) { a, b -> Pair(a,b) }
 
 
-fun <Token, Res> parseList(parserList: List<Parser<Token,Res>>): Parser<Token, List<Res>> {
+fun <Token, Res> pList(parserList: List<Parser<Token,Res>>): Parser<Token, List<Res>> {
     return { input ->
         val res = mutableListOf<Res>()
         var leftOfInput = input
@@ -31,7 +38,7 @@ fun <Token, Res> parseList(parserList: List<Parser<Token,Res>>): Parser<Token, L
 }
 
 
-fun <Token, A> parseManySpecificCount(numChildren: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
+fun <Token, A> pManySpecificCount(numChildren: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
     return { input ->
         var rest = input
         val res = (1..numChildren).map {
@@ -43,7 +50,7 @@ fun <Token, A> parseManySpecificCount(numChildren: Int, parser: Parser<Token, A>
     }
 }
 
-fun <Token, A> parseManySpecificTokenCount(numBytes: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
+fun <Token, A> pManySpecificTokenCount(numBytes: Int, parser: Parser<Token, A>): Parser<Token, List<A>> {
     return { input ->
         var consumedBytes = 0
         val res = mutableListOf<A>()
@@ -56,7 +63,16 @@ fun <Token, A> parseManySpecificTokenCount(numBytes: Int, parser: Parser<Token, 
     }
 }
 
-fun <Token> literal(literal: List<Token>): Parser<Token, Unit> {
+fun <Token> pToken(token: Token): Parser<Token, Unit> {
+    return { input ->
+        if (input.isEmpty()) throw NoMatchException("Couldn't find literal $token in empty input")
+        if (input.first() != token) throw NoMatchException("Couldn't find literal $token")
+        Pair(Unit, input.drop(1))
+    }
+}
+
+
+fun <Token> pLiteral(literal: List<Token>): Parser<Token, Unit> {
     return { input ->
         if (input.take(literal.size) != literal) {
             throw NoMatchException("Couldn't find literal $literal")
@@ -74,7 +90,7 @@ infix fun <Token, A, B> (Parser<Token,A>).thenDo(parser: Parser<Token, B>): Pars
     }
 }
 
-infix fun <Token, A, B> (Parser<Token,A>).ignoring(parser: Parser<Token, B>): Parser<Token,A> {
+infix fun <Token, A, B> (Parser<Token,A>).thenIgnore(parser: Parser<Token, B>): Parser<Token,A> {
     return {
             input ->
         val (a, r) = this(input)
@@ -83,7 +99,7 @@ infix fun <Token, A, B> (Parser<Token,A>).ignoring(parser: Parser<Token, B>): Pa
     }
 }
 
-fun <Token, A>  oneOf(parser: Parser<Token, A>, parser2: Parser<Token, A>): Parser<Token,A> {
+fun <Token, A>  pOneOf(parser: Parser<Token, A>, parser2: Parser<Token, A>): Parser<Token,A> {
     return { input ->
         try {
             val (a, rest) = parser(input)
@@ -95,7 +111,7 @@ fun <Token, A>  oneOf(parser: Parser<Token, A>, parser2: Parser<Token, A>): Pars
     }
 }
 
-fun parseInt(input: List<Char>) : ParseResult<Char, Int> {
+fun pInt(input: List<Char>) : ParseResult<Char, Int> {
     val digits = input.takeWhile { it.isDigit() || it == '-'}
     if (digits.isEmpty()) throw NoMatchException("No integer found")
 

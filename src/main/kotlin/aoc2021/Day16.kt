@@ -38,7 +38,7 @@ fun List<Int>.bitsToInt() : Int {
     return fold(0){ acc, i -> acc*2+i}
 }
 
-fun parseFixLenghtBinaryInt(numBits: Int): Parser<Int, Int> {
+fun pFixLenghtBinaryInt(numBits: Int): Parser<Int, Int> {
     return { input ->
         if (input.size < numBits) throw NoMatchException("Too few elements to parse $numBits-length binary number")
         val num = input.take(numBits).bitsToInt()
@@ -46,11 +46,11 @@ fun parseFixLenghtBinaryInt(numBits: Int): Parser<Int, Int> {
     }
 }
 
-fun parseBit(input: List<Int>): ParseResult<Int, Boolean> {
+fun pBit(input: List<Int>): ParseResult<Int, Boolean> {
     return Pair(input.first() == 1, input.drop(1))
 }
 
-fun parsePentaBytes(input: List<Int>): ParseResult<Int, Long> {
+fun pPentaBytes(input: List<Int>): ParseResult<Int, Long> {
     var res = 0L
     var eatenBytes = 0
     for (chunk in input.asSequence().chunked(5)) {
@@ -63,35 +63,35 @@ fun parsePentaBytes(input: List<Int>): ParseResult<Int, Long> {
     return Pair(res, input.drop(eatenBytes))
 }
 
-fun packetParser(input: List<Int>): ParseResult<Int, Packet> {
-    val headerParser = parsePair(
-        parseFixLenghtBinaryInt(3),
-        parseFixLenghtBinaryInt(3))
+fun pPacket(input: List<Int>): ParseResult<Int, Packet> {
+    val headerParser = pPair(
+        pFixLenghtBinaryInt(3),
+        pFixLenghtBinaryInt(3))
     val (header,rest1) = headerParser(input)
     val (version, type) = header
 
     if (type == 4) {
 
-        val (value, rest3) = parsePentaBytes(rest1)
+        val (value, rest3) = pPentaBytes(rest1)
         return Pair(Packet(version=version, type=type, value=value), rest3)
 
     } else {
 
-        val (lenghtType, rest2) = parseBit(rest1)
+        val (lenghtType, rest2) = pBit(rest1)
 
         if (lenghtType) {
-            val (numChildren, rest4) = parseFixLenghtBinaryInt(11)(rest2)
+            val (numChildren, rest4) = pFixLenghtBinaryInt(11)(rest2)
 
-            val parseChildren  = parseManySpecificCount(numChildren) { it: List<Int> -> packetParser(it) }
+            val parseChildren  = pManySpecificCount(numChildren) { it: List<Int> -> pPacket(it) }
             val (children : List<Packet>, rest5) = parseChildren(rest4)
 
             return Pair(Packet(version=version, type=type, value=0, children=children), rest5)
 
         } else {
 
-            val (numBytes, rest4) = parseFixLenghtBinaryInt(15)(rest2)
+            val (numBytes, rest4) = pFixLenghtBinaryInt(15)(rest2)
 
-            val parseChildren  = parseManySpecificTokenCount(numBytes) { it: List<Int> -> packetParser(it) }
+            val parseChildren  = pManySpecificTokenCount(numBytes) { it: List<Int> -> pPacket(it) }
             val (children : List<Packet>, rest5) = parseChildren(rest4)
 
             return Pair(Packet(version=version, type=type, value=0, children=children), rest5)
@@ -129,7 +129,7 @@ class Day16Problem(override val inputFilePath: String) : DailyProblem {
 
     override fun commonParts() {
         val binaryString: List<Int> = parseHexFileToBinary(inputFilePath)
-        val (parsedPacket, _) = packetParser(binaryString)
+        val (parsedPacket, _) = pPacket(binaryString)
         this.packet = parsedPacket
     }
     override fun part1(): Long {

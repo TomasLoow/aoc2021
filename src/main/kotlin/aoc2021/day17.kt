@@ -10,13 +10,14 @@ import kotlin.time.ExperimentalTime
 
 private fun parseTrickShot(path: String): List<Int> {
     val line = File(path).readLines().single().toList()
-
-    val pminX = literal("target area: x=".toList()) thenDo ::parseInt
-    val pmaxX = literal("..".toList()) thenDo ::parseInt
-    val pminY = literal(", y=".toList()) thenDo ::parseInt
-    val pmaxY = literal("..".toList()) thenDo ::parseInt
-    val parser: Parser<Char,List<Int>> = parseList(listOf(pminX, pmaxX, pminY, pmaxY))
-
+    val parser: Parser<Char,List<Int>> = pList(
+        listOf(
+            pLiteral("target area: x=".toList()) thenDo ::pInt,
+            pLiteral("..".toList()) thenDo ::pInt,
+            pLiteral(", y=".toList()) thenDo ::pInt,
+            pLiteral("..".toList()) thenDo ::pInt
+        )
+    )
 
     val (res, _) = parser(line)
     return res
