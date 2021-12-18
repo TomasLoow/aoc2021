@@ -38,30 +38,49 @@ internal class Day18Test {
 
     @Test
     fun test_split() {
-        assertEquals(parseSnailNumber("[5,6]").arr, parseSnailNumber("11").split().arr)
-        assertEquals(parseSnailNumber("[1,[[7,8],10]]").arr, parseSnailNumber("[1,[15,10]]").split().arr)
-        assertEquals(parseSnailNumber("[1,[7,[5,5]]]").arr, parseSnailNumber("[1,[7,10]]").split().arr)
+        var num : Tree
+        num = parseSnailNumber("11")
+        num.split()
+        assertEquals("[5,6]", num.print())
+
+        num = parseSnailNumber("[1,[15,10]]")
+        num.split()
+        assertEquals("[1,[[7,8],10]]", num.print())
+
+        num = parseSnailNumber("[1,[7,10]]")
+        num.split()
+        assertEquals("[1,[7,[5,5]]]", num.print())
 
         val noSplits = parseSnailNumber("[[3,4],[7,[5,5]]]")
-        assertEquals(noSplits, noSplits.split())
+        noSplits.split()
+        assertEquals("[[3,4],[7,[5,5]]]", noSplits.print())
     }
 
     @Test
     fun test_explode() {
 
-        assertEquals(parseSnailNumber("[[[[0,9],2],3],4]").arr, parseSnailNumber("[[[[[9,8],1],2],3],4]").explode().arr)
-        assertEquals(parseSnailNumber("[7,[6,[5,[7,0]]]]").arr, parseSnailNumber("[7,[6,[5,[4,[3,2]]]]]").explode().arr)
-        assertEquals(parseSnailNumber("[[6,[5,[7,0]]],3]").arr, parseSnailNumber("[[6,[5,[4,[3,2]]]],1]").explode().arr)
-        assertEquals(parseSnailNumber("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]").arr, parseSnailNumber("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]").explode().arr)
-        assertEquals(parseSnailNumber("[[3,[2,[8,0]]],[9,[5,[7,0]]]]").arr, parseSnailNumber("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]").explode().arr)
+        var num=parseSnailNumber("[[[[[9,8],1],2],3],4]")
+        num.explode()
+        assertEquals("[[[[0,9],2],3],4]", num.print())
+        num=parseSnailNumber("[7,[6,[5,[4,[3,2]]]]]")
+        num.explode()
+        assertEquals("[7,[6,[5,[7,0]]]]", num.print())
+        num=parseSnailNumber("[[6,[5,[4,[3,2]]]],1]")
+        num.explode()
+        assertEquals("[[6,[5,[7,0]]],3]", num.print())
+        num=parseSnailNumber("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]")
+        num.explode()
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]", num.print())
+        num=parseSnailNumber("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]")
+        num.explode()
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[7,0]]]]", num.print())
 
     }
 
     @Test
     fun test_plus() {
         val added = parseSnailNumber("[[[[4,3],4],4],[7,[[8,4],9]]]") + parseSnailNumber("[1,1]")
-        val expected = parseSnailNumber("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]" )
 
-        assertEquals(expected.arr, added.arr)
+        assertEquals("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", added.print())
     }
 }

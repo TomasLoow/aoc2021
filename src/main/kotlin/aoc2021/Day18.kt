@@ -9,89 +9,93 @@ enum class ZigZag {L,R}
 
 typealias TreePos = List<ZigZag>
 
-class Tree(internal val arr: List<Pair<TreePos, Int>>) {
+class Tree(var arr: Array<Pair<TreePos, Int>>) {
+
+    internal var usedSize = arr.size
 
     val right: Tree
-        get() = Tree(arr.filter { it.first.first() == ZigZag.R }.map { it.copy(first = it.first.drop(1))})
+        get() = Tree(arrList().filter { it.first.first() == ZigZag.R }.map { it.copy(first = it.first.drop(1))}.toTypedArray())
 
     val left: Tree
-        get() = Tree(arr.filter { it.first.first() == ZigZag.L }.map { it.copy(first = it.first.drop(1))})
+        get() = Tree(arrList().filter { it.first.first() == ZigZag.L }.map { it.copy(first = it.first.drop(1))}.toTypedArray())
 
     fun isLeaf(): Boolean = arr.size==1
 
     fun getMagnitue(): Int {
-        if (arr.size == 1) return arr.first().second
+        if (arr.size == 1) return arr[0].second
 
         return 3 * left.getMagnitue() + 2 * right.getMagnitue()
     }
 
-    fun split(): Tree {
-        val thingToSplit = this.arr.withIndex().find { idxVal ->
+    private fun expandArray() {
+        val newArray = Array<Pair<TreePos,Int>>(arr.size * 2 ) { i ->
+            if (i < usedSize) arr[i] else Pair(emptyList(),0)
+        }
+        this.arr = newArray
+    }
+
+    fun split(): Boolean {
+        val thingToSplit = this.arr.take(usedSize).withIndex().find { idxVal ->
             idxVal.value.second >= 10
         }
-        if (thingToSplit == null) return this
+        if (thingToSplit == null) return false
         val idx = thingToSplit.index
         val pathTo = thingToSplit.value.first
         val value = thingToSplit.value.second
 
-        val newList = listOf(
-            Pair(pathTo + ZigZag.L, value/2),
-            Pair(pathTo + ZigZag.R, value/2 + value.mod(2)),
-        )
-
-        return Tree(arr.take(idx) + newList + arr.drop(idx+1))
+        if (usedSize==arr.size) {
+            expandArray()
+        }
+        for (i in (usedSize downTo idx+2)) {
+            arr[i] = arr[i-1]
+        }
+        arr[idx]=Pair(pathTo + ZigZag.L, value/2)
+        arr[idx+1]=Pair(pathTo + ZigZag.R, value/2 + value.mod(2))
+        usedSize += 1
+        return true
     }
 
-    fun explode(): Tree {
-        val thingToSplit = this.arr.withIndex().find { idxVal ->
+    fun explode(): Boolean {
+        val thingToSplit = this.arr.take(usedSize).withIndex().find { idxVal ->
             idxVal.value.first.size >= 5
         }
 
-        if (thingToSplit == null) return this
+        if (thingToSplit == null) return false
         val idx = thingToSplit.index
-        val pathTo = thingToSplit.value.first
         val value = thingToSplit.value.second
         val neighbourValue = arr[idx+1].second
 
-        val newList = listOf(
-            Pair(pathTo.dropLast(1), 0),
-        )
-
-        val before = arr.take(idx).toMutableList()
-        val after = arr.drop(idx+2).toMutableList()
-        if (before.isNotEmpty()) {
-            val lastBefore = before[before.size - 1]
-            before[before.size - 1] = lastBefore.copy(second = lastBefore.second + value)
+        if (idx > 0) {
+            arr[idx-1] = arr[idx-1].copy(second = arr[idx-1].second + value)
+        }
+        if (idx + 1  < usedSize - 1) {
+            arr[idx+2] = arr[idx+2].copy(second = arr[idx+2].second + neighbourValue)
         }
 
-        if (after.isNotEmpty()) {
-            val firstAfter = after[0]
-            after[0] = firstAfter.copy(second = firstAfter.second + neighbourValue)
+        for (i in (idx+1 .. usedSize-2)) {
+            arr[i] = arr[i+1]
         }
-
-        return Tree(before + newList + after)
+        arr[idx] = arr[idx].copy(first = arr[idx].first.dropLast(1), second = 0)
+        usedSize -= 1
+        return true
     }
 
-    fun reduce(): Tree {
-        var reduced = Tree(this.arr)
-        while (true) {
-            val exploded = reduced.explode()
-            if (reduced.arr != exploded.arr) {
-                reduced = exploded
-                continue
-            }
-            val splut = exploded.split()
-            if (splut.arr == exploded.arr) {
-                reduced = splut
-                break
-            }
-            reduced = splut
+    fun reduce() {
+        var changed=true
+        while (changed) {
+
+            changed = explode()
+            if (changed) continue
+
+            changed = split()
         }
-        return reduced
+        return
     }
 
     operator fun plus(t: Tree): Tree {
-        return branch(this, t).reduce()
+        val added = branch(this, t)
+        added.reduce()
+        return added
     }
 
     fun print(): String {
@@ -102,18 +106,22 @@ class Tree(internal val arr: List<Pair<TreePos, Int>>) {
             return "[${left.print()},${right.print()}]"
         }
     }
+
+    fun arrList(): List<Pair<TreePos,Int>> {
+        return arr.take(usedSize)
+    }
 }
 
 fun leaf(i: Int): Tree {
-    return Tree(listOf(Pair(emptyList(), i)))
+    return Tree(arrayOf(Pair(emptyList(), i)))
 }
 
 fun branch(left: Tree, right: Tree): Tree {
-    return Tree(buildList {
-        addAll(left.arr.map { it -> it.copy(first=(listOf(ZigZag.L) + it.first)) })
-        addAll(right.arr.map { it -> it.copy(first=(listOf(ZigZag.R) + it.first)) })
-    })
+    val arr: Array<Pair<TreePos,Int>> = (
+            left.arrList().map { it -> it.copy(first=(listOf(ZigZag.L) + it.first)) } +
+            right.arrList().map { it -> it.copy(first=(listOf(ZigZag.R) + it.first)) }).toTypedArray()
 
+    return Tree(arr)
 }
 
 fun parseSnailNumber(str: String) : Tree {
